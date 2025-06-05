@@ -55,9 +55,11 @@ export default function Flashcards() {
                 setLoadingFlashcards(true);
                 try {
                     const generated = await generateFlashcardsFromGemini(chunk);
-                    if (generated?.length > 0) {
-                        const oneFlashcard = generated[0];
-                        flashcardList.push({ ...oneFlashcard, sourceChunk: chunk });
+                    if (Array.isArray(generated) && generated.length > 0) {
+                    const flashcardsWithChunk = generated.map((card) => ({ ...card,
+                    sourceChunk: chunk,
+                    }));
+                        flashcardList.push(...flashcardsWithChunk);
                     }
                 } catch {
                     //empty pour pas laisser de console.error ;)
