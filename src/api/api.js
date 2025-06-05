@@ -24,6 +24,9 @@ export async function generateFlashcardsFromGemini(chapter) {
     // Parse le JSON renvoyé par Gemini
     const jsonStart = generatedText.indexOf("[");
     const jsonEnd = generatedText.lastIndexOf("]") + 1;
+    if (jsonStart === -1 || jsonEnd === 0 || jsonEnd <= jsonStart) {
+        throw new Error("Le JSON de Gemini est mal formé ou absent.");
+}
     const jsonString = generatedText.substring(jsonStart, jsonEnd);
     const parsedFlashcards = JSON.parse(jsonString);
     return parsedFlashcards;
