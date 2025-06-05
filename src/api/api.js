@@ -1,6 +1,7 @@
-export async function generateFlashcardsFromGemini(chapter) {
+export async function generateFlashcardsFromGemini(text) {
     const apiKey = import.meta.env.VITE_GEMINI_API_KEY;
 
+    //IA-1-TXT: Prompt reformulé par ChatGPT (OpenAI) pour éviter des erreurs de formatage
     const response = await fetch(`https://generativelanguage.googleapis.com/v1beta/models/gemini-2.0-flash:generateContent?key=${apiKey}`, {
         method: "POST",
         headers: {
@@ -8,7 +9,20 @@ export async function generateFlashcardsFromGemini(chapter) {
         },
         body: JSON.stringify({
             contents: [{
-                parts: [{ text: `Tu es un générateur de flashcards en français strictement. Génère 10 flashcards en JSON (question + réponse) à partir de strictement ce chapitre : ${chapter}` }]
+                parts: [{
+                    text: `Tu es un générateur de flashcards en français.
+
+                    Génère 10 flashcards au format JSON.
+
+                    Chaque carte doit avoir :
+                    - "question": string
+                    - "answer": string
+
+                    Réponds uniquement avec un tableau JSON. Aucun texte autour.
+
+                    Voici le texte :
+                    ${text}`
+                }]
             }]
         })
     });
@@ -31,6 +45,7 @@ export async function generateFlashcardsFromGemini(chapter) {
     const parsedFlashcards = JSON.parse(jsonString);
     return parsedFlashcards;
 }
+//IA-1-TXT: Prompt reformulé par ChatGPT (OpenAI) pour éviter des erreurs de formatage
 export async function generateQuizFromGemini(text, quizType) {
     const apiKey = import.meta.env.VITE_GEMINI_API_KEY;
 
