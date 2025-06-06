@@ -44,7 +44,7 @@ export default function QuizDisplay({ quiz, quizValidated, setQuizValidated }) {
         const isSelected = isQRM ? selected?.includes(choiceIndex) : selected === choiceIndex;
         const isRightAnswer = isQRM ? q.correct.includes(choiceIndex) : q.correct === choiceIndex;
 
-        let borderColor = "border-gray-300";
+        let borderColor = "border-slate-300";
         let bgColor = "";
         let icon = "";
 

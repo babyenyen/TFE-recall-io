@@ -198,7 +198,7 @@ export default function Toolbar({ editor, setLoadingQuiz }) {
                             </div>
                         </AlertDialogHeader>
                         <AlertDialogFooter>
-                            <AlertDialogCancel className="bg-transparent hover:bg-transparent text-slate-400 hover:text-purple-600">Annuler</AlertDialogCancel>
+                            <AlertDialogCancel>Annuler</AlertDialogCancel>
                             <AlertDialogAction
                                 onClick={handleConfirm}
                             >

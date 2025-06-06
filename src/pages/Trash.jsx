@@ -1,10 +1,11 @@
 import useItems from "@/hooks/useItems";
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import {
     Trash2,
     FolderClosed,
     File,
     Undo2,
+    BrushCleaning,
 } from "lucide-react";
 import {
     Card,
@@ -13,6 +14,17 @@ import {
     CardContent,
 } from "@/components/ui/card";
 import { useNavigate } from "react-router-dom";
+import {
+    AlertDialog,
+    AlertDialogTrigger,
+    AlertDialogContent,
+    AlertDialogHeader,
+    AlertDialogTitle,
+    AlertDialogDescription,
+    AlertDialogFooter,
+    AlertDialogCancel,
+    AlertDialogAction,
+} from "@/components/ui/alert-dialog";
 import noTrash from "../assets/noTrash.png"
 
 export default function Trash() {
@@ -47,9 +59,45 @@ export default function Trash() {
         setItems(updated);
     };
 
+    const [openDialog, setOpenDialog] = useState(false);
+
     return (
         <div className="p-4">
-            <h1>Corbeille</h1>
+            <div className="flex flex-wrap justify-between items-center gap-2 mb-2">
+                <h1>Corbeille</h1>
+                {trashedItems.length > 0 && (
+                    <AlertDialog open={openDialog} onOpenChange={setOpenDialog}>
+                        <AlertDialogTrigger asChild>
+                            <button
+                                className="flex items-center text-sm bg-red-500 text-slate-50 hover:bg-red-700 transition"
+                            >
+                                <BrushCleaning size={24} className="inline" />
+                            </button>
+                        </AlertDialogTrigger>
+                        <AlertDialogContent>
+                            <AlertDialogHeader>
+                                <AlertDialogTitle>Sortir les poubelles ?</AlertDialogTitle>
+                                <AlertDialogDescription>
+                                    Cette action est irréversible. Tous les éléments de la corbeille seront supprimés définitivement.
+                                </AlertDialogDescription>
+                            </AlertDialogHeader>
+                            <AlertDialogFooter>
+                                <AlertDialogCancel>Annuler</AlertDialogCancel>
+                                <AlertDialogAction
+                                    className="bg-red-500 hover:bg-red-700"
+                                    onClick={() => {
+                                        const remaining = items.filter((item) => !item.deleted);
+                                        setItems(remaining);
+                                        setOpenDialog(false);
+                                    }}
+                                >
+                                    Supprimer tout
+                                </AlertDialogAction>
+                            </AlertDialogFooter>
+                        </AlertDialogContent>
+                    </AlertDialog>
+                )}
+            </div>
             <div className="mt-6 grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 2xl:grid-cols-6 gap-4">
                 {trashedItems.length === 0 ? (
                     <Card className="border border-dotted border-violet-400 bg-slate-100">

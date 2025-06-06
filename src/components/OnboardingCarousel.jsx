@@ -44,7 +44,7 @@ export default function OnboardingCarousel() {
             <div className="transition-all duration-300 md:min-h-[420px] flex flex-col items-center justify-between">
                 <div>
                     <h2 className="text-2xl font-bold text-violet-700 mb-1">{slides[index].title}</h2>
-                    <p className="text-gray-600 text-base">{slides[index].description}</p>
+                    <p className="text-slate-600 text-base">{slides[index].description}</p>
                 </div>
                 <img
                     src={slides[index].image}
