@@ -128,7 +128,7 @@ export default function Dashboard() {
                         </CardContent>
                         <CardHeader className="flex items-center flex-col space-y-2 pt-0">
                             <CardTitle className="text-center text-base font-semibold text-violet-600">
-                                Il n'y a rien à voir ici ...
+                                C'est un peu vide ici ...
                             </CardTitle>
                             <p className="text-sm text-center font-normal">Ajoute vite un élément.</p>
                         </CardHeader>
