@@ -5,7 +5,6 @@ import {
     FilePlus,
     Star,
     Trash2,
-    Pencil,
     FolderClosed,
     File,
 } from "lucide-react";
@@ -24,6 +23,8 @@ import {
     CardTitle,
     CardContent,
 } from "@/components/ui/card";
+import RenameDialogCard from "@/components/RenameDialogCard";
+import RenameDialogTitle from "@/components/RenameDialogTitle";
 
 export default function Folder() {
     // On récupère l'ID du dossier courant depuis les paramètres de l'URL
@@ -74,15 +75,12 @@ export default function Folder() {
     };
 
     // Renommer un élément
-    const renameItem = (id) => {
-        const newName = prompt("Nouveau nom :");
-        if (newName && newName.trim()) {
-            setItems((prev) =>
-                prev.map((item) =>
-                    item.id === id ? { ...item, name: newName.trim() } : item
-                )
-            );
-        }
+    const renameItem = (id, newName) => {
+        setItems((prev) =>
+            prev.map((item) =>
+                item.id === id ? { ...item, name: newName } : item
+            )
+        );
     };
 
     return (
@@ -113,22 +111,10 @@ export default function Folder() {
                             />
                         </button>
                         <h1>{current?.name || "Dossier"}</h1>
-                        <button
-                            onClick={() => {
-                                const newName = prompt("Renommer :", current.name);
-                                if (newName && newName.trim()) {
-                                    setItems((prev) =>
-                                        prev.map((item) =>
-                                            item.id === current.id ? { ...item, name: newName.trim() } : item
-                                        )
-                                    );
-                                }
-                            }}
-                            title="Renommer"
-                            className="group bg-transparent m-0 p-0 pl-2 text-slate-300"
-                        >
-                            <Pencil size={25} className="group-hover:text-slate-500" />
-                        </button>
+                        <RenameDialogTitle
+                            item={current}
+                            onRename={renameItem}
+                        />
                     </>
                 )}
             </div>
@@ -200,16 +186,7 @@ export default function Folder() {
                                 <CardTitle className="text-center text-base font-normal">
                                     {item.name}
                                 </CardTitle>
-                                <button
-                                    onClick={(e) => {
-                                        e.stopPropagation();
-                                        renameItem(item.id);
-                                    }}
-                                    title="Renommer"
-                                    className="group absolute -right-7 bottom-1 bg-transparent m-0 p-0 px-2 text-slate-300"
-                                >
-                                    <Pencil size={14} className="group-hover:text-slate-500" />
-                                </button>
+                                <RenameDialogCard item={item} onRename={renameItem} />
                             </div>
                         </CardHeader>
                     </Card>

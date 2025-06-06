@@ -1,11 +1,12 @@
 import { useState } from "react";
 import { useParams } from "react-router-dom";
-import { Pencil, Star } from "lucide-react";
+import { Star } from "lucide-react";
 import Breadcrumb from "@/components/ui/breadcrumb";
 import Editor from "@/components/ui/editor";
 import useItems from "@/hooks/useItems";
 import Lottie from "lottie-react";
 import loaderAnimation from "@/assets/animations/loader.json";
+import RenameDialogTitle from "@/components/RenameDialogTitle";
 
 export default function FilePage() {
     // On récupère l'ID du fichier depuis les paramètres de l'URL
@@ -21,6 +22,14 @@ export default function FilePage() {
         return <div className="p-4">Fichier non trouvé</div>;
     }
 
+    // renommer un item
+    const renameItem = (id, newName) => {
+        setItems((prev) =>
+            prev.map((item) =>
+                item.id === id ? { ...item, name: newName } : item
+            )
+        );
+    };
     // IA-1-CODE: Correction de syntaxe et explication de la logique par ChatGPT (OpenAI)
     return (
         <div className="p-4">
@@ -55,22 +64,10 @@ export default function FilePage() {
                     />
                 </button>
                 <h1>{current?.name || "Dossier"}</h1>
-                <button
-                    onClick={() => {
-                        const newName = prompt("Renommer :", current.name);
-                        if (newName && newName.trim()) {
-                            setItems((prev) =>
-                                prev.map((item) =>
-                                    item.id === current.id ? { ...item, name: newName.trim() } : item
-                                )
-                            );
-                        }
-                    }}
-                    title="Renommer"
-                    className="group bg-transparent m-0 p-0 pl-2 text-slate-300"
-                >
-                    <Pencil size={25} className="group-hover:text-slate-500" />
-                </button>
+                <RenameDialogTitle
+                    item={current}
+                    onRename={renameItem}
+                />
             </div>
 
             <Breadcrumb items={items} />
