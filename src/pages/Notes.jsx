@@ -7,6 +7,7 @@ import {
     CardContent,
 } from "@/components/ui/card";
 import useItems from "@/hooks/useItems";
+import noFile from "../assets/noFile.png"
 
 export default function Notes() {
     // Hook personnalisé pour gérer les éléments (dossiers et fichiers)
@@ -51,11 +52,21 @@ export default function Notes() {
     return (
         <div className="p-4">
             <h1>Toutes les notes</h1>
-            {notes.length === 0 ? (
-                <p className="mt-4 text-slate-500">Aucune note disponible.</p>
-            ) : (
-                <div className="mt-6 grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 2xl:grid-cols-6 gap-4">
-                    {notes.map((item) => (
+            <div className="mt-6 grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 2xl:grid-cols-6 gap-4">
+                {notes.length === 0 ? (
+                    <Card className="border border-dotted border-violet-400 bg-slate-100">
+                        <CardContent className="flex justify-between text-slate-400 pt-6">
+                            <img src={noFile} alt="Nouveau fichier" className="w-auto h-32 mx-auto" />
+                        </CardContent>
+                        <CardHeader className="flex items-center flex-col space-y-2 pt-0">
+                            <CardTitle className="text-center text-base font-semibold text-violet-600">
+                                Tu n'as aucune note ...
+                            </CardTitle>
+                            <p className="text-sm text-center font-normal">Ajoute tes notes via le tableau de bord.</p>
+                        </CardHeader>
+                    </Card>
+                ) : (
+                    notes.map((item) => (
                         <Card
                             key={item.id}
                             onClick={() => navigate(`/app/file/${item.id}`)}
@@ -107,9 +118,9 @@ export default function Notes() {
                                 </div>
                             </CardHeader>
                         </Card>
-                    ))}
-                </div>
-            )}
+                    ))
+                )}
+            </div>
         </div>
     );
 }

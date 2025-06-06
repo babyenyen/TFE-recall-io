@@ -26,6 +26,7 @@ import RenameDialogCard from "@/components/RenameDialogCard";
 import { useNavigate } from "react-router-dom";
 import { getUser } from "@/utils/auth"; // adapte le chemin si besoin
 import { useEffect, useState } from "react";
+import newFile from "../assets/newFile.png"
 
 export default function Dashboard() {
     // Hook personnalisé pour gérer les éléments (dossiers et fichiers)
@@ -92,9 +93,13 @@ export default function Dashboard() {
         setUser(current);
     }, []);
 
+    const rootVisibleItems = items.filter(
+        (item) => !item.deleted && !item.parentId
+    );
+
     return (
         <div className="w-full h-full p-4">
-            <h1>Bienvenue {user?.username ?? "invité"} !</h1>
+            <h1>Bienvenue {user?.username ?? "à toi"} !</h1>
             <Breadcrumb items={items} />
             {/* Bouton + menu */}
             <DropdownMenu>
@@ -116,8 +121,20 @@ export default function Dashboard() {
 
             {/* Grille d’éléments */}
             <div className="mt-6 grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 2xl:grid-cols-6 gap-4">
-                {items.filter(item => !item.deleted && !item.parentId)
-                    .map((item) => (
+                {rootVisibleItems.length === 0 ? (
+                    <Card className="border border-dotted border-violet-400 bg-slate-100">
+                        <CardContent className="flex justify-between text-slate-400 pt-6">
+                            <img src={newFile} alt="Nouveau fichier" className="w-auto h-32 mx-auto" />
+                        </CardContent>
+                        <CardHeader className="flex items-center flex-col space-y-2 pt-0">
+                            <CardTitle className="text-center text-base font-semibold text-violet-600">
+                                Il n'y a rien à voir ici ...
+                            </CardTitle>
+                            <p className="text-sm text-center font-normal">Ajoute vite un élément.</p>
+                        </CardHeader>
+                    </Card>
+                ) : (
+                    rootVisibleItems.map((item) => (
                         <Card
                             key={item.id}
                             onClick={() => navigate(`/app/${item.type}/${item.id}`)}
@@ -160,7 +177,8 @@ export default function Dashboard() {
                                 </div>
                             </CardHeader>
                         </Card>
-                    ))}
+                    ))
+                    )}
             </div>
         </div>
     );

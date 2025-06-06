@@ -7,6 +7,7 @@ import {
     CardContent,
 } from "@/components/ui/card";
 import useItems from "@/hooks/useItems";
+import noFavorites from "../assets/noFavorites.png"
 
 export default function Favorites() {
     const [items, setItems] = useItems();
@@ -48,15 +49,27 @@ export default function Favorites() {
     return (
         <div className="p-4">
             <h1>Favoris</h1>
-            {favorites.length === 0 ? (
-                <p className="mt-4 text-slate-500">Aucun élément en favori.</p>
-            ) : (
-                <div className="mt-6 grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 2xl:grid-cols-6 gap-4">
-                    {favorites.map((item) => (
+            <div className="mt-6 grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 2xl:grid-cols-6 gap-4">
+                {favorites.length === 0 ? (
+                    <Card className="border border-dotted border-violet-400 bg-slate-100">
+                        <CardContent className="flex justify-between text-slate-400 pt-6">
+                            <img src={noFavorites} alt="Nouveau fichier" className="w-auto h-32 mx-auto" />
+                        </CardContent>
+                        <CardHeader className="flex items-center flex-col space-y-2 pt-0">
+                            <CardTitle className="text-center text-base font-semibold text-violet-600">
+                                Aucun favoris ici ...
+                            </CardTitle>
+                            <p className="text-sm text-center font-normal">Attrape vite les étoiles.</p>
+                        </CardHeader>
+                    </Card>
+                ) : (
+                    favorites.map((item) => (
                         <Card
                             key={item.id}
                             onClick={() => navigate(`/app/${item.type}/${item.id}`)}
-                            className={item.type === "folder" ? "border  bg-violet-50 cursor-pointer hover:bg-violet-100 transition" : "cursor-pointer hover:bg-slate-50 transition"}
+                            className={item.type === "folder"
+                                ? "border bg-violet-50 cursor-pointer hover:bg-violet-100 transition"
+                                : "cursor-pointer hover:bg-slate-50 transition"}
                         >
                             <CardContent className="flex justify-between p-0 text-slate-400">
                                 <button
@@ -69,7 +82,9 @@ export default function Favorites() {
                                 >
                                     <Star
                                         size={18}
-                                        className={item.favorite ? "fill-yellow-400 text-yellow-400" : "group-hover:text-yellow-400"}
+                                        className={item.favorite
+                                            ? "fill-yellow-400 text-yellow-400"
+                                            : "group-hover:text-yellow-400"}
                                     />
                                 </button>
                                 <button
@@ -78,14 +93,16 @@ export default function Favorites() {
                                         deleteItem(item.id);
                                     }}
                                     title="Supprimer"
-                                    className="group bg-transparent m-0text-slate-400"
+                                    className="group bg-transparent m-0 text-slate-400"
                                 >
                                     <Trash2 size={18} className="group-hover:text-red-500" />
                                 </button>
                             </CardContent>
                             <CardHeader className="flex items-center flex-col space-y-2 pt-0">
                                 <div className="text-3xl">
-                                    {item.type === "folder" ? <FolderClosed className="h-16 w-auto text-violet-700" /> : <File className="h-16 w-auto text-violet-700" />}
+                                    {item.type === "folder"
+                                        ? <FolderClosed className="h-16 w-auto text-violet-700" />
+                                        : <File className="h-16 w-auto text-violet-700" />}
                                 </div>
                                 <div className="flex relative">
                                     <CardTitle className="text-center text-base font-normal">
@@ -104,9 +121,9 @@ export default function Favorites() {
                                 </div>
                             </CardHeader>
                         </Card>
-                    ))}
-                </div>
-            )}
+                    ))
+                )}
+            </div>
         </div>
     );
 }

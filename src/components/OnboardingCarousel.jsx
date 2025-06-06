@@ -41,9 +41,11 @@ export default function OnboardingCarousel() {
     return (
         <div className="w-full max-w-xl mx-auto my-5 px-6 text-center bg-transparent relative">
             {/* Contenu du slide */}
-            <div className="transition-all duration-300 md:min-h-96">
-                <h2 className="text-2xl font-bold text-violet-700 mb-1">{slides[index].title}</h2>
-                <p className="text-gray-600 text-base">{slides[index].description}</p>
+            <div className="transition-all duration-300 md:min-h-[420px] flex flex-col items-center justify-between">
+                <div>
+                    <h2 className="text-2xl font-bold text-violet-700 mb-1">{slides[index].title}</h2>
+                    <p className="text-gray-600 text-base">{slides[index].description}</p>
+                </div>
                 <img
                     src={slides[index].image}
                     alt={slides[index].title}
