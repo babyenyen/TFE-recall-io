@@ -23,8 +23,9 @@ import {
     CardContent,
 } from "@/components/ui/card";
 import RenameDialogCard from "@/components/RenameDialogCard";
-
 import { useNavigate } from "react-router-dom";
+import { getUser } from "@/utils/auth"; // adapte le chemin si besoin
+import { useEffect, useState } from "react";
 
 export default function Dashboard() {
     // Hook personnalisé pour gérer les éléments (dossiers et fichiers)
@@ -84,9 +85,16 @@ export default function Dashboard() {
         );
     };
 
+    const [user, setUser] = useState(null);
+
+    useEffect(() => {
+        const current = getUser();
+        setUser(current);
+    }, []);
+
     return (
         <div className="w-full h-full p-4">
-            <h1>Tableau de bord</h1>
+            <h1>Bienvenue {user?.username ?? "invité"} !</h1>
             <Breadcrumb items={items} />
             {/* Bouton + menu */}
             <DropdownMenu>

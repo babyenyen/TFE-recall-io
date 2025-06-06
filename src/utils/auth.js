@@ -1,4 +1,4 @@
-// IA-1-CODE: Explication par ChatGPT (OpenAI)
+// IA-1-CODE: Explication de ce js par ChatGPT (OpenAI)
 const users = [
     {
         id: 1,
@@ -32,6 +32,7 @@ export const register = (username, email, password) => {
 
     // Pour l'instant, j'utilise localStorage pour simuler une base de données
     localStorage.setItem("user", JSON.stringify(newUser));
+
     return { success: true };
 };
 
