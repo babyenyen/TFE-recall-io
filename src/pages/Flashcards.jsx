@@ -6,8 +6,8 @@ import { Button } from "@/components/ui/button";
 import { generateFlashcardsFromGemini } from "@/api/api";
 import Flashcard from "@/components/Flashcard";
 import {
-    Undo,
-    Redo,
+    ChevronsLeft,
+    ChevronsRight,
     Info,
     Undo2
 } from "lucide-react";
@@ -139,21 +139,21 @@ export default function Flashcards() {
                             onClick={handlePrevious}
                             disabled={currentIndex === 0}
                             className={`border-solid border border-slate-300 rounded-md p-1 sm:p-2 ${currentIndex === 0
-                                ? "bg-slate-100 cursor-not-allowed"
+                                ? "bg-slate-100 pointer-events-none"
                                 : "bg-white hover:bg-slate-50"
                                 }`}
                         >
-                            <Undo size={16} className="text-slate-500" />
+                            <ChevronsLeft size={16} className="text-slate-500" />
                         </button>
                         <button
                             onClick={handleNext}
                             disabled={flashcards.length === 0}
                             className={`border-solid border border-slate-300 rounded-md p-1 sm:p-2 ${flashcards.length === 0
-                                ? "bg-slate-100 cursor-not-allowed"
+                                ? "bg-slate-100 pointer-events-none"
                                 : "bg-white hover:bg-slate-50"
                                 }`}
                         >
-                            <Redo size={16} className="text-slate-500" />
+                            <ChevronsRight size={16} className="text-slate-500" />
                         </button>
                     </div>
                     <AlertDialog>
@@ -202,7 +202,7 @@ export default function Flashcards() {
                         setRevealed={setRevealed}
                     />
                 ) : (
-                    <p>Aucune flashcard disponible. Cliquez sur "Suivante" pour commencer.</p>
+                    <p>Aucune flashcard disponible. Réessaie plus tard.</p>
                 )}
                 <div className="flex gap-4 mt-4">
                     <Button

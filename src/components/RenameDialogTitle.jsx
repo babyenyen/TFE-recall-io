@@ -30,10 +30,10 @@ export default function RenameDialog({ item, onRename }) {
             <AlertDialogTrigger asChild>
                 <button
                     title="Renommer"
-                    className="group bg-transparent m-0 p-0 pl-2 text-slate-300"
+                    className="group bg-transparent m-0 p-0 pl-2 text-slate-400"
                     onClick={(e) => e.stopPropagation()}
                 >
-                    <Pencil size={25} className="group-hover:text-slate-500" />
+                    <Pencil size={25} className="group-hover:text-violet-600" />
                 </button>
             </AlertDialogTrigger>
             <AlertDialogContent onClick={(e) => e.stopPropagation()}>

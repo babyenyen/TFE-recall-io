@@ -110,6 +110,7 @@ export default function Toolbar({ editor, setLoadingQuiz }) {
     };
     // IA-1-CODE: Explication de l'initilisation de l'éditeur par Tiptap par ChatGPT (OpenAI)
     if (!editor) return null;
+    const isEditorEmpty = !editor.getText().trim();
 
     return (
         <div className="flex justify-between items-center border rounded-lg border-slate-300 bg-slate-50 p-1 mb-2 text-sm text-slate-500">
@@ -117,9 +118,9 @@ export default function Toolbar({ editor, setLoadingQuiz }) {
                 <button
                     onClick={() => editor.chain().focus().undo().run()}
                     disabled={!editor.can().undo()}
-                    className={`border-solid border rounded-md p-1 sm:p-2 border-slate-300  ${editor.can().undo()
+                    className={`border-solid border rounded-md p-1 sm:p-2 border-slate-300 ${editor.can().undo()
                         ? "bg-white"
-                        : "bg-slate-100 cursor-not-allowed"
+                        : "bg-slate-100 pointer-events-none"
                         }`}
                 >
                     <Undo size={16} className="text-slate-500" />
@@ -127,9 +128,9 @@ export default function Toolbar({ editor, setLoadingQuiz }) {
                 <button
                     onClick={() => editor.chain().focus().redo().run()}
                     disabled={!editor.can().redo()}
-                    className={`border-solid border rounded-md p-1 sm:p-2 border-slate-300  ${editor.can().redo()
+                    className={`border-solid border rounded-md p-1 sm:p-2 border-slate-300 ${editor.can().redo()
                         ? "bg-white"
-                        : "bg-slate-100 cursor-not-allowed"
+                        : "bg-slate-100 pointer-events-none"
                         }`}
                 >
                     <Redo size={16} className="text-slate-500" />
@@ -159,17 +160,25 @@ export default function Toolbar({ editor, setLoadingQuiz }) {
                 <Separator orientation="vertical" className="h-8 w-[1px] bg-slate-300 mx-1" />
 
                 <button
+                    disabled={isEditorEmpty}
+                    title={isEditorEmpty ? "Ajoute du contenu pour activer les flashcards" : ""}
                     onClick={() => navigate(`/app/flashcards/${id}`)}
-                    className="flex justify-center items-center border-solid border border-violet-400 bg-white p-0 rounded-md hover:bg-violet-100 text-violet-600 px-2 h-7 sm:h-8">
+                    className={`flex justify-center items-center border border-solid border-slate-300 rounded-md px-2 h-7 sm:h-8
+                    ${isEditorEmpty
+                        ? "bg-slate-100 pointer-events-none"
+                            : "bg-white text-violet-600 hover:bg-violet-100"}`}>
                     Flashcards
                 </button>
-
                 <button
+                    disabled={isEditorEmpty}
+                    title={isEditorEmpty ? "Ajoute du contenu pour activer le quiz" : ""}
                     onClick={() => setQuizOpen(true)}
-                    className="flex justify-center items-center border-solid border border-violet-400 bg-white p-0 rounded-md hover:bg-violet-100 text-violet-600 px-2 h-7 sm:h-8">
+                    className={`flex justify-center items-center border border-solid border-slate-300 rounded-md px-2 h-7 sm:h-8
+                    ${isEditorEmpty
+                        ? "bg-slate-100 pointer-events-none"
+                            : "bg-white text-violet-600 hover:bg-violet-100"}`}>
                     Quiz
                 </button>
-
                 <AlertDialog open={quizOpen} onOpenChange={setQuizOpen}>
                     <AlertDialogContent>
                         <AlertDialogHeader>

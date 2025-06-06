@@ -10,7 +10,7 @@ export default function Editor({ content, onChange, setLoadingQuiz }) {
             StarterKit,
             Underline,
             Placeholder.configure({
-                placeholder: "Écris tes notes ici...",
+                placeholder: "Écris tes note ici...",
                 emptyEditorClass:
                     "before:text-slate-400 before:content-[attr(data-placeholder)] before:italic",
             }),
