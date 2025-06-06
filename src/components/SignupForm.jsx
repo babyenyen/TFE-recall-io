@@ -14,7 +14,7 @@ export default function SignupForm({ onToggle }) {
 
         const result = register(username, email, password);
         if (result.success) {
-            navigate("/app");
+            navigate("/app/dashboard");
         } else {
             setError(result.message);
         }
