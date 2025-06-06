@@ -24,7 +24,7 @@ import {
 import QuizTypeSelector from "@/components/QuizTypeSelector";
 import { generateQuizFromGemini } from "@/api/api";
 import { chunkText } from "@/utils/textUtils";
-
+import Slide4 from "../assets/slide4.png";
 
 export default function Toolbar({ editor, setLoadingQuiz }) {
     const navigate = useNavigate();
@@ -212,14 +212,16 @@ export default function Toolbar({ editor, setLoadingQuiz }) {
                 <AlertDialogContent>
                     <AlertDialogHeader>
                         <AlertDialogTitle>Comment utiliser recall-io ?</AlertDialogTitle>
-                        <AlertDialogDescription>
-                            Voici quelques conseils :
-                            <br/>• Prends tes notes directement dans l'éditeur.
-                            <br />• Tu peux prendre tes notes dans la langue dont t'as besoin.
-                            <br />• Utilise le bouton recall-io pour étudier.
-                            <br />• Sélectionne l'option flashcards ou quiz.
-                            <br />• Tu peux recommencer autant que tu souahites.
-                        </AlertDialogDescription>
+                        <div className="flex items-center">
+                            <img src={Slide4} className="w-auto h-36 mr-10 mt-5" />
+                            <AlertDialogDescription>
+                                Voici quelques conseils :
+                                <br/>• Ecris tes notes dans l'éditeur.
+                                <br />• Tes notes peuvent être dans n'importe quelle langue.
+                                <br/>• recall-io les traduira automatiquement.
+                                <br/>• Générer des flashcards ou un quiz en cliquant sur les boutons correspondants.
+                            </AlertDialogDescription>
+                        </div>
                     </AlertDialogHeader>
                     <AlertDialogFooter>
                         <AlertDialogCancel>J'ai compris</AlertDialogCancel>

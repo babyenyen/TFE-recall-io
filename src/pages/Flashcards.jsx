@@ -25,6 +25,7 @@ import { chunkText } from "@/utils/textUtils";
 import { Card, CardContent } from "@/components/ui/card";
 import Lottie from "lottie-react";
 import loaderAnimation from "@/assets/animations/loader.json";
+import Slide2 from "../assets/slide2.png";
 
 export default function Flashcards() {
     // On récupère l'ID du fichier depuis les paramètres de l'URL
@@ -168,13 +169,16 @@ export default function Flashcards() {
                         <AlertDialogContent>
                             <AlertDialogHeader>
                                 <AlertDialogTitle>Comment utiliser les flashcards ?</AlertDialogTitle>
-                                <AlertDialogDescription>
-                                    Voici quelques conseils :
-                                    <br />• Clique sur la carte pour révéler/masquer la réponse.
-                                    <br />• Utilise les flèches pour naviguer entre les cartes.
-                                    <br />• Chaque carte est générée à partir du contenu de tes notes.
-                                    <br />• Tu peux générer autant de carte que tu le souhaites.
-                                </AlertDialogDescription>
+                                <div className="flex items-center">
+                                    <img src={Slide2} className="w-auto h-36 mr-10 mt-5" />
+                                    <AlertDialogDescription>
+                                        Voici quelques conseils :
+                                        <br />• Clique sur la carte pour révéler/masquer la réponse.
+                                        <br />• Utilise les flèches pour naviguer entre les cartes.
+                                        <br />• Chaque carte est générée à partir du contenu de tes notes.
+                                        <br />• Tu peux générer autant de carte que tu le souhaites.
+                                    </AlertDialogDescription>
+                                </div>
                             </AlertDialogHeader>
                             <AlertDialogFooter>
                                 <AlertDialogCancel>J'ai compris</AlertDialogCancel>

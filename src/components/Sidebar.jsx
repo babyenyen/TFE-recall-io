@@ -37,7 +37,7 @@ export default function Sidebar() {
             className={`${collapsed ? "w-16" : "w-64"
                 } sticky transition-all duration-300 bg-slate-200 h-full flex flex-col justify-between`}
         >
-            <div className="p-4">
+            <div className="py-4 flex flex-col items-center">
                 <div
                     className={`mb-6 flex items-center h-10 transition-all ${collapsed ? "justify-center w-10 h-10 transition-all" : ""}`}
                     onClick={() => {
@@ -83,7 +83,7 @@ export default function Sidebar() {
                     ))}
                 </nav>
             </div>
-            <div className="p-4">
+            <div className="pb-4">
                 <div
                     onClick={handleLogout}
                     role="button"
