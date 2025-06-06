@@ -69,7 +69,7 @@ export default function QuizDisplay({ quiz, quizValidated, setQuizValidated }) {
 
         return { borderColor, bgColor, icon };
     };
-
+    // IA-1-CODE: Explication de la logique de feedback visuel par ChatGPT (OpenAI)
     return (
         <div className="mt-4">
             <div className="space-y-6">
@@ -121,7 +121,6 @@ export default function QuizDisplay({ quiz, quizValidated, setQuizValidated }) {
                                 )}
                             </div>
 
-                            // IA-1-CODE: Explication de la logique de feedback visuel par ChatGPT (OpenAI)
                             <div className="space-y-2 mt-2">
                                 {isQRM ? (
                                     q.choices.map((choice, i) => {
