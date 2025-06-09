@@ -34,7 +34,7 @@ export default function Sidebar() {
 
     return (
         <aside
-            className={`${collapsed ? "w-16" : "w-64"
+            className={`${collapsed ? "w-16" : "w-56"
                 } sticky transition-all duration-300 bg-slate-200 h-full flex flex-col justify-between`}
         >
             <div className="py-4 flex flex-col items-center">
@@ -83,7 +83,7 @@ export default function Sidebar() {
                     ))}
                 </nav>
             </div>
-            <div className="pb-4">
+            <div className="pb-4 flex flex-col items-center">
                 <div
                     onClick={handleLogout}
                     role="button"

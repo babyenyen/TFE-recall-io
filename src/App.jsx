@@ -10,6 +10,7 @@ import FilePage from "./pages/FilePage";
 import Quiz from "./pages/Quiz";
 import Flashcards from "./pages/Flashcards";
 import MainLayout from "./layout/MainLayout";
+import WelcomePage from "./pages/WelcomePage";
 
 // IA-1-CODE: Explication de Router par ChatGPT (OpenAI)
 export default function App() {
@@ -21,6 +22,7 @@ export default function App() {
 
         {/* Layout principal pour l'app */}
         <Route path="/app" element={<MainLayout />}>
+          <Route index element={<WelcomePage />} />
           <Route path="dashboard" element={<Dashboard />} />
           <Route path="favorites" element={<Favorites />} />
           <Route path="notes" element={<Notes />} />
