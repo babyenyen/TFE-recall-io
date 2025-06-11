@@ -67,13 +67,13 @@ export default function Trash() {
 
     return (
         <div className="p-4">
-            <div className="flex flex-wrap justify-end md:justify-between items-center gap-2 md:mb-2 mt-6 md:mt-0">
+            <div className="flex justify-end md:justify-between items-center gap-2 md:mb-2 md:mt-0">
                 <h1 className="md:block hidden">Corbeille</h1>
                 {trashedItems.length > 0 && (
                     <AlertDialog open={openDialog} onOpenChange={setOpenDialog}>
                         <AlertDialogTrigger asChild>
                             <button
-                                className="flex items-center text-sm bg-red-100 hover:bg-red-200 text-red-600 transition-all"
+                                className="absolute md:static top-4 z-30 flex items-center text-sm bg-red-100 hover:bg-red-200 text-red-600 transition-all"
                             >
                                 <BrushCleaning size={18} className="inline" />
                                 <p className="ml-2 hidden md:block">Sortir les poubelles</p>
@@ -150,7 +150,7 @@ export default function Trash() {
                                     {item.type === "folder" ? <FolderClosed className="h-16 w-auto text-violet-700" /> : <File className="h-16 w-auto text-violet-700" />}
                                 </div>
                                 <div className="flex">
-                                    <CardTitle className="text-center text-base font-normal">
+                                    <CardTitle className="text-center text-base font-normal truncate max-w-[140px] overflow-hidden whitespace-nowrap">
                                         {item.name}
                                     </CardTitle>
                                 </div>

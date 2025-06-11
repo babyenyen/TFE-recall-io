@@ -5,7 +5,8 @@ import {
     StickyNote,
     Trash2,
     LogOut,
-    Zap
+    Zap,
+    ListTodo
 } from "lucide-react";
 import LogoIcon from "@/components/common/LogoIcon";
 import LogoFull from "@/components/common/LogoFull";
@@ -17,7 +18,7 @@ const links = [
     { to: "/app/favorites", label: "Favoris", icon: <Star className="w-5 h-5" /> },
     { to: "/app/notes", label: "Toutes les notes", icon: <StickyNote className="w-5 h-5" /> },
     { to: "/app/all-flash", label: "Toutes les flashcards", icon: <Zap className="w-5 h-5" /> },
-    { to: "/app/all-quiz", label: "Tous les quiz", icon: <Zap className="w-5 h-5" /> },
+    { to: "/app/all-quiz", label: "Tous les quiz", icon: <ListTodo className="w-5 h-5" /> },
     { to: "/app/trash", label: "Corbeille", icon: <Trash2 className="w-5 h-5" /> },
 ];
 

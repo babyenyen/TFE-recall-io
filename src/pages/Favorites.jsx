@@ -110,7 +110,7 @@ export default function Favorites() {
                                         : <File className="h-16 w-auto text-violet-700" />}
                                 </div>
                                 <div className="flex relative">
-                                    <CardTitle className="text-center text-base font-normal">
+                                    <CardTitle className="text-center text-base font-normal truncate max-w-[140px] overflow-hidden whitespace-nowrap">
                                         {item.name}
                                     </CardTitle>
                                     <button

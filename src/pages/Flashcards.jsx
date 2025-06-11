@@ -187,7 +187,7 @@ export default function Flashcards() {
 
     return (
         <div className="p-4">
-            <h1 className="md:block hidden">Flashcards pour : {current.name}</h1>
+            <h1 className="md:block hidden truncate max-w-[540px] overflow-hidden whitespace-nowrap">Flashcards pour : {current.name}</h1>
             <Breadcrumb items={items} />
             <div className="max-w-2xl mx-auto relative">
                 <div className="flex justify-between items-center gap-2 border rounded-lg border-slate-300 bg-slate-50 p-1 mb-2 text-sm text-slate-500">
@@ -221,6 +221,8 @@ export default function Flashcards() {
                                 className="bg-transparent" />
                             <p className="hidden sm:block ml-1 text-xs">Générer un pack</p>
                         </button>
+                    </div>
+                    <div className="flex items-center gap-2">
                         <button
                             onClick={handleDeleteCurrentCard}
                             className="flex justify-center items-center rounded-md p-1 sm:p-2 bg-red-100 hover:bg-red-200 text-red-600 transition-all"
@@ -228,36 +230,36 @@ export default function Flashcards() {
                             <ThumbsDown size={16} className="text-red-600" />
                             <p className="hidden sm:block ml-1 text-xs">Supprimer</p>
                         </button>
-                    </div>
-                    <AlertDialog>
-                        <AlertDialogTrigger asChild>
-                            <button
-                                className="flex items-center gap-2 border-solid border border-slate-300 bg-white p-1 sm:p-2 rounded-md text-sm text-slate-600 hover:bg-slate-50"
-                                title="Aide"
-                            >
-                                <Info size={16} />
-                            </button>
-                        </AlertDialogTrigger>
+                        <AlertDialog>
+                            <AlertDialogTrigger asChild>
+                                <button
+                                    className="flex items-center gap-2 border-solid border border-slate-300 bg-white p-1 sm:p-2 rounded-md text-sm text-slate-600 hover:bg-slate-50"
+                                    title="Aide"
+                                >
+                                    <Info size={16} />
+                                </button>
+                            </AlertDialogTrigger>
 
-                        <AlertDialogContent>
-                            <AlertDialogHeader>
-                                <AlertDialogTitle>Comment utiliser les flashcards ?</AlertDialogTitle>
-                                <div className="flex items-center md:flex-row flex-col">
-                                    <img src={Slide2} className="w-auto h-36 mr-10 mt-5" />
-                                    <AlertDialogDescription className="text-left mt-5 md:m-0">
-                                        Voici quelques conseils :
-                                        <br />• Clique sur "+" pour générer un pack de flashcards.
-                                        <br />• Utilise les flèches pour naviguer entre les cartes.
-                                        <br />• Chaque pack est généré à partir du contenu de tes notes.
-                                        <br />• Si une carte ne te plait pas, supprime la du pack en appuyant sur le pouce vers le bas.
-                                    </AlertDialogDescription>
-                                </div>
-                            </AlertDialogHeader>
-                            <AlertDialogFooter>
-                                <AlertDialogCancel>J'ai compris</AlertDialogCancel>
-                            </AlertDialogFooter>
-                        </AlertDialogContent>
-                    </AlertDialog>
+                            <AlertDialogContent>
+                                <AlertDialogHeader>
+                                    <AlertDialogTitle>Comment utiliser les flashcards ?</AlertDialogTitle>
+                                    <div className="flex items-center md:flex-row flex-col">
+                                        <img src={Slide2} className="w-auto h-36 mr-10 mt-5" />
+                                        <AlertDialogDescription className="text-left mt-5 md:m-0">
+                                            Voici quelques conseils :
+                                            <br />• Clique sur "+" pour générer un pack de flashcards.
+                                            <br />• Utilise les flèches pour naviguer entre les cartes.
+                                            <br />• Chaque pack est généré à partir du contenu de tes notes.
+                                            <br />• Si une carte ne te plait pas, supprime la du pack en appuyant sur le pouce vers le bas.
+                                        </AlertDialogDescription>
+                                    </div>
+                                </AlertDialogHeader>
+                                <AlertDialogFooter>
+                                    <AlertDialogCancel>J'ai compris</AlertDialogCancel>
+                                </AlertDialogFooter>
+                            </AlertDialogContent>
+                        </AlertDialog>
+                    </div>
                 </div>
                 <div className="absolute top-14 [left:calc(50%-50px)]">
                     <p className="text-sm text-slate-500 mb-2 text-center w-[100px]">
@@ -288,7 +290,7 @@ export default function Flashcards() {
                 )}
                 <Button
                     onClick={() => navigate(`/app/file/${id}`)}
-                    className="flex items-center bg-transparent hover:bg-transparent text-slate-400 hover:text-violet-600"
+                    className="flex items-center bg-transparent hover:bg-transparent text-slate-400 hover:text-violet-600 px-0"
                 >
                     <Undo2 size={16} className="mr-2" /> Revenir aux notes
                 </Button>

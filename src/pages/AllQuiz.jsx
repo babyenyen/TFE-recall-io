@@ -2,8 +2,7 @@ import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import useItems from "@/hooks/useItems";
 import { usePageTitle } from "@/components/PageTitleContext";
-import { FileText, Trash2 } from "lucide-react";
-import { Button } from "@/components/ui/button";
+import { Trash2 } from "lucide-react";
 
 export default function AllQuiz() {
     const [quizzes, setQuizzes] = useState([]);
@@ -12,7 +11,7 @@ export default function AllQuiz() {
     const { setPageTitle } = usePageTitle();
 
     useEffect(() => {
-        setPageTitle("Tous les quiz validés");
+        setPageTitle("Tous les quiz corrigés");
         const keys = Object.keys(localStorage);
         const quizKeys = keys.filter(key => key.startsWith("quiz_validated_"));
 
@@ -55,7 +54,7 @@ export default function AllQuiz() {
 
     return (
         <div className="p-4">
-            <h1 className="md:block hidden">Tous les quiz validés</h1>
+            <h1 className="md:block hidden">Tous les quiz corrigés</h1>
             {quizzes.length === 0 ? (
                 <p className="text-slate-500">Aucun quiz validé. Lance un quiz depuis une page de fichier.</p>
             ) : (
@@ -73,11 +72,11 @@ export default function AllQuiz() {
                                         {q.score}/{q.total} correctes
                                     </p>
                                 </div>
-                                <div className="flex gap-2 md:items-center items-end">
+                                <div className="flex flex-col-reverse md:flex-row gap-2 md:items-center items-end">
                                     <p className="text-xs text-slate-500">
-                                        {formatDate(q.validatedAt)}
+                                        corrigé le {formatDate(q.validatedAt)}
                                     </p>
-                                    <Button
+                                    <button
                                         onClick={(e) => {
                                             e.stopPropagation();
                                             deleteQuiz(q.id)
@@ -86,8 +85,8 @@ export default function AllQuiz() {
                                         title="Supprimer cette correction"
                                     >
                                         <Trash2 size={16} className="text-red-600" />
-                                        <p className="hidden sm:block ml-1 text-xs">Supprimer le pack</p>
-                                    </Button>
+                                        <p className="hidden sm:block ml-1 text-xs">Supprimer la correction</p>
+                                    </button>
                                 </div>
                             </li>
                         ))}

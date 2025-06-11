@@ -14,6 +14,24 @@ export default function QuizDisplay({ quiz, quizValidated, setQuizValidated }) {
     const navigate = useNavigate();
     const { id } = useParams();
 
+    let score = 0;
+    const total = quiz.length;
+
+    if (quizValidated) {
+        score = quiz.reduce((acc, q) => {
+            const s = q.selected;
+            if (Array.isArray(q.correct)) {
+                const allCorrect =
+                    Array.isArray(s) &&
+                    s.length === q.correct.length &&
+                    s.every((i) => q.correct.includes(i));
+                return acc + (allCorrect ? 1 : 0);
+            } else {
+                return acc + (s === q.correct ? 1 : 0);
+            }
+        }, 0);
+    }
+
     const toggleSelect = (qIndex, cIndex, isMultiple) => {
         setSelectedAnswers((prev) => {
             const current = prev[qIndex] || (isMultiple ? [] : null);
@@ -69,6 +87,7 @@ export default function QuizDisplay({ quiz, quizValidated, setQuizValidated }) {
 
         return { borderColor, bgColor, icon };
     };
+
     // IA-1-CODE: Explication de la logique de feedback visuel par ChatGPT (OpenAI)
     return (
         <div className="mt-4">
@@ -129,7 +148,8 @@ export default function QuizDisplay({ quiz, quizValidated, setQuizValidated }) {
                                         return (
                                             <label
                                                 key={i}
-                                                className={`flex items-center justify-between w-full p-2 border ${borderColor} ${bgColor} rounded cursor-pointer`}
+                                                className={`flex items-center justify-between w-full p-2 border ${borderColor} ${bgColor} rounded cursor-pointer
+                                                ${quizValidated ? "pointer-events-none" : ""}`}
                                             >
                                                 <div className="flex items-center gap-2">
                                                     <Checkbox
@@ -156,7 +176,7 @@ export default function QuizDisplay({ quiz, quizValidated, setQuizValidated }) {
                                                 <label
                                                     key={i}
                                                     htmlFor={`q${index}-opt${i}`}
-                                                    className={`flex items-center justify-between w-full p-2 border ${borderColor} ${bgColor} rounded cursor-pointer`}
+                                                    className={`flex items-center justify-between w-full p-2 border ${borderColor} ${bgColor} rounded cursor-pointer ${quizValidated ? "pointer-events-none" : ""}`}
                                                 >
                                                     <div className="flex items-center gap-2">
                                                         <RadioGroupItem
@@ -220,12 +240,17 @@ export default function QuizDisplay({ quiz, quizValidated, setQuizValidated }) {
             )}
 
             {quizValidated && (
-                <Button
-                    onClick={() => navigate(`/app/file/${id}`)}
-                    className="flex items-center bg-transparent hover:bg-transparent text-slate-400 hover:text-violet-600 mt-2"
-                >
-                    <Undo2 size={16} className="mr-2" /> Revenir aux notes
-                </Button>
+                <div className="flex justify-between gap-4">
+                    <Button
+                        onClick={() => navigate(`/app/file/${id}`)}
+                        className="flex items-center bg-transparent hover:bg-transparent text-slate-400 hover:text-violet-600 mt-2 px-0"
+                    >
+                        <Undo2 size={16} className="mr-2" /> Revenir aux notes
+                    </Button>
+                    <p className="text-base text-right font-semibold text-slate-600 my-4">
+                        Score total : {score}/{total}
+                    </p>
+                </div>
             )}
         </div>
     );

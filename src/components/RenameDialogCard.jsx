@@ -1,3 +1,4 @@
+import { useEffect, useState } from "react";
 import {
     AlertDialog,
     AlertDialogTrigger,
@@ -10,13 +11,23 @@ import {
     AlertDialogAction
 } from "@/components/ui/alert-dialog";
 import { Input } from "@/components/ui/input";
-import { useState } from "react";
 import { Pencil } from "lucide-react";
 
 //IA-1-CODE: Explication de la logique pour passer d'un "pompt" au "AlertDialog" de shadcn-ui par ChatGPT (OpenAI)
-export default function RenameDialogCard({ item, onRename }) {
+export default function RenameDialogCard({ item, onRename, onCancel , forceOpen = false }) {
     const [open, setOpen] = useState(false);
     const [newName, setNewName] = useState(item.name);
+
+    useEffect(() => {
+        if (forceOpen) setOpen(true);
+    }, [forceOpen]);
+
+    const handleClose = () => {
+        if (forceOpen && onCancel) {
+            onCancel(item.id);
+        }
+        setOpen(false);
+    };
 
     const handleConfirm = () => {
         if (newName.trim()) {
@@ -52,7 +63,7 @@ export default function RenameDialogCard({ item, onRename }) {
                     }}
                 />
                 <AlertDialogFooter>
-                    <AlertDialogCancel>Annuler</AlertDialogCancel>
+                    <AlertDialogCancel variant="ghost" onClick={handleClose}>Annuler</AlertDialogCancel>
                     <AlertDialogAction onClick={handleConfirm}>Confirmer</AlertDialogAction>
                 </AlertDialogFooter>
             </AlertDialogContent>

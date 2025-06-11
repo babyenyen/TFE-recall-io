@@ -79,7 +79,7 @@ export default function AllFlash() {
             {packs.length === 0 ? (
                 <p className="text-slate-500">Il n’y a pas de flash ici. Tu peux en générer via ta page de notes.</p>
             ) : (
-                <div className="mt-6 max-w-2xl mx-auto relative">
+                <div className="mt-6">
                     <ul className="space-y-2">
                         {packs.map((pack) => (
                             <li
@@ -92,7 +92,7 @@ export default function AllFlash() {
                                         {pack.name} </p>
                                     <p className="text-sm text-slate-500">{pack.count} cartes</p>
                                 </div>
-                                <div className="flex gap-2 md:items-center items-end">
+                                <div className="flex flex-col-reverse md:flex-row gap-2 md:items-center items-end">
                                     <p className="text-xs text-slate-500">
                                         {pack.createdAt && `créé le ${formatDate(pack.createdAt)}`}
                                     </p>

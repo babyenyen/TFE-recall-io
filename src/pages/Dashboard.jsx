@@ -32,6 +32,7 @@ import { usePageTitle } from "@/components/PageTitleContext";
 export default function Dashboard() {
     // Hook personnalisé pour gérer les éléments (dossiers et fichiers)
     const [items, setItems] = useItems();
+    const [newItemId, setNewItemId] = useState(null);
 
     // Chargement initial
     useItems(() => {
@@ -46,14 +47,20 @@ export default function Dashboard() {
 
     // Ajout d'un nouvel élément (dossier ou fichier)
     const handleAdd = (type) => {
+        const id = crypto.randomUUID();
         const newItem = {
-            id: crypto.randomUUID(),
+            id,
             type,
             name: type === "folder" ? "Nouveau dossier" : "Nouveau fichier",
             favorite: false,
             deleted: false,
         };
         setItems((prev) => [...prev, newItem]);
+        setNewItemId(id);
+    };
+
+    const handleCancelRename = (id) => {
+        setItems((prev) => prev.filter((item) => item.id !== id));
     };
 
     // Navigation
@@ -178,10 +185,15 @@ export default function Dashboard() {
                                     {item.type === "folder" ? <FolderClosed className="h-16 w-auto text-violet-700" /> : <File className="h-16 w-auto text-violet-700" />}
                                 </div>
                                 <div className="flex relative">
-                                    <CardTitle className="text-center text-base font-normal">
+                                    <CardTitle className="text-center text-base font-normal truncate max-w-[140px] overflow-hidden whitespace-nowrap">
                                         {item.name}
                                     </CardTitle>
-                                    <RenameDialogCard item={item} onRename={renameItem} />
+                                    <RenameDialogCard
+                                        item={item}
+                                        onRename={renameItem}
+                                        onCancel={handleCancelRename}
+                                        forceOpen={item.id === newItemId}
+                                    />
                                 </div>
                             </CardHeader>
                         </Card>
