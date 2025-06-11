@@ -137,7 +137,7 @@ export default function Folder() {
                                 }
                             />
                         </button>
-                        <h1 className="md:block hidden truncate max-w-[540px] overflow-hidden whitespace-nowrap">{current?.name || "Dossier"}</h1>
+                        <h1 className="md:block hidden truncate max-w-[750px] overflow-hidden whitespace-nowrap">{current?.name || "Dossier"}</h1>
                         <RenameDialogTitle
                             item={current}
                             onRename={renameItem}

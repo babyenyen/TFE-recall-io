@@ -31,7 +31,7 @@ export default function QuizValidated() {
 
     return (
         <div className="p-4">
-            <h1 className="md:block hidden truncate max-w-[540px] overflow-hidden whitespace-nowrap">(Quiz corrigé) {current?.name}</h1>
+            <h1 className="md:block hidden truncate max-w-[750px] overflow-hidden whitespace-nowrap">(Quiz corrigé) {current?.name}</h1>
             <QuizDisplay
                 quiz={data.questions}
                 quizValidated={true}

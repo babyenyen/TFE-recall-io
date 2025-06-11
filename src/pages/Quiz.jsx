@@ -77,7 +77,7 @@ export default function Quiz() {
 
     return (
         <div className="p-4">
-            <h1 className="md:block hidden truncate max-w-[540px] overflow-hidden whitespace-nowrap">(Quiz) {current?.name}</h1>
+            <h1 className="md:block hidden truncate max-w-[750px] overflow-hidden whitespace-nowrap">(Quiz) {current?.name}</h1>
             <Breadcrumb items={items} />
 
             {!quizStarted && (
