@@ -182,7 +182,37 @@ export default function QuizDisplay({ quiz, quizValidated, setQuizValidated }) {
                 <div className="flex justify-end gap-4 mt-4">
                     <Button
                         className="bg-violet-600 text-white rounded-md font-medium text-sm hover:bg-violet-500"
-                        onClick={() => setQuizValidated(true)}
+                        onClick={() => {
+                            const validatedAt = new Date().toISOString();
+                            const computed = quiz.map((q, index) => ({
+                                ...q,
+                                selected: selectedAnswers[index] ?? (Array.isArray(q.correct) ? [] : null),
+                            }));
+
+                            const score = computed.reduce((acc, q) => {
+                                const s = q.selected;
+                                if (Array.isArray(q.correct)) {
+                                    const allCorrect =
+                                        Array.isArray(s) &&
+                                        s.length === q.correct.length &&
+                                        s.every((i) => q.correct.includes(i));
+                                    return acc + (allCorrect ? 1 : 0);
+                                } else {
+                                    return acc + (s === q.correct ? 1 : 0);
+                                }
+                            }, 0);
+
+                            const payload = {
+                                questions: computed,
+                                score,
+                                total: computed.length,
+                                validatedAt,
+                            };
+
+                            localStorage.setItem(`quiz_validated_${id}`, JSON.stringify(payload));
+
+                            setQuizValidated(true);
+                        }}
                     >
                         Valider mes réponses
                     </Button>
@@ -190,14 +220,12 @@ export default function QuizDisplay({ quiz, quizValidated, setQuizValidated }) {
             )}
 
             {quizValidated && (
-                <div className="flex gap-4 mt-4">
-                    <Button
-                        onClick={() => navigate(`/app/file/${id}`)}
-                        className="flex items-center bg-transparent hover:bg-transparent text-slate-400 hover:text-violet-600"
-                    >
-                        <Undo2 size={16} className="mr-2" /> Revenir aux notes
-                    </Button>
-                </div>
+                <Button
+                    onClick={() => navigate(`/app/file/${id}`)}
+                    className="flex items-center bg-transparent hover:bg-transparent text-slate-400 hover:text-violet-600 mt-2"
+                >
+                    <Undo2 size={16} className="mr-2" /> Revenir aux notes
+                </Button>
             )}
         </div>
     );

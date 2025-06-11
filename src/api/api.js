@@ -1,7 +1,7 @@
+//IA-1-TXT: Prompt reformulé par ChatGPT (OpenAI) pour éviter des erreurs de formatage
 export async function generateFlashcardsFromGemini(text) {
     const apiKey = import.meta.env.VITE_GEMINI_API_KEY;
 
-    //IA-1-TXT: Prompt reformulé par ChatGPT (OpenAI) pour éviter des erreurs de formatage
     const response = await fetch(`https://generativelanguage.googleapis.com/v1beta/models/gemini-2.0-flash:generateContent?key=${apiKey}`, {
         method: "POST",
         headers: {
@@ -20,7 +20,7 @@ export async function generateFlashcardsFromGemini(text) {
 
                     Réponds uniquement avec un tableau JSON. Aucun texte autour.
 
-                    Voici le texte :
+                    Voici le texte à utiliser, igonre les balises HTML :
                     ${text}`
                 }]
             }]
@@ -45,6 +45,7 @@ export async function generateFlashcardsFromGemini(text) {
     const parsedFlashcards = JSON.parse(jsonString);
     return parsedFlashcards;
 }
+
 //IA-1-TXT: Prompt reformulé par ChatGPT (OpenAI) pour éviter des erreurs de formatage
 export async function generateQuizFromGemini(text, quizType) {
     const apiKey = import.meta.env.VITE_GEMINI_API_KEY;
@@ -69,7 +70,7 @@ Génère 1 question ${typePhrase} au format JSON.
 
     Réponds uniquement avec un tableau JSON. Aucun texte autour.
 
-    Voici le texte :
+    Voici le texte à utiliser, ignore les balises HTML :
     ${text}`;
 
 

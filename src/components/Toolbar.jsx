@@ -6,7 +6,9 @@ import {
     Underline,
     Undo,
     Redo,
-    Info
+    Info,
+    Zap,
+    LayoutList
 } from "lucide-react";
 import { useNavigate, useParams } from "react-router-dom";
 import { Separator } from "@radix-ui/react-dropdown-menu";
@@ -113,8 +115,8 @@ export default function Toolbar({ editor, setLoadingQuiz }) {
     const isEditorEmpty = !editor.getText().trim();
 
     return (
-        <div className="flex justify-between items-center border rounded-lg border-slate-300 bg-slate-50 p-1 mb-2 text-sm text-slate-500">
-            <div className="flex items-center gap-2">
+        <div className="flex justify-between items-center border rounded-lg border-slate-300 bg-slate-50 p-1 text-sm text-slate-500">
+            <div className="flex items-center gap-1">
                 <button
                     onClick={() => editor.chain().focus().undo().run()}
                     disabled={!editor.can().undo()}
@@ -136,7 +138,7 @@ export default function Toolbar({ editor, setLoadingQuiz }) {
                     <Redo size={16} className="text-slate-500" />
                 </button>
 
-                <Separator orientation="vertical" className="h-8 w-[1px] bg-slate-300 mx-1" />
+                <Separator orientation="vertical" className="h-6 sm:h-8 w-[1px] bg-slate-300 mx-1" />
 
                 <button
                     onClick={() => editor.chain().focus().toggleBold().run()}
@@ -152,32 +154,44 @@ export default function Toolbar({ editor, setLoadingQuiz }) {
                 </button>
                 <button
                     onClick={() => editor.chain().focus().toggleUnderline().run()}
-                    className={`border-solid border rounded-md p-1 sm:p-2 border-slate-300 ${editor.isActive("underline") ? "underline bg-violet-200" : "bg-white"}`}
+                    className={`border border-solid rounded-md p-1 sm:p-2 border-slate-300 ${editor.isActive("underline") ? "underline bg-violet-200" : "bg-white"}`}
                 >
                     <Underline size={16} className="text-slate-500" />
                 </button>
 
-                <Separator orientation="vertical" className="h-8 w-[1px] bg-slate-300 mx-1" />
+                <Separator orientation="vertical" className="h-6 sm:h-8 w-[1px] bg-slate-300 mx-1" />
 
                 <button
                     disabled={isEditorEmpty}
                     title={isEditorEmpty ? "Ajoute du contenu pour activer les flashcards" : ""}
                     onClick={() => navigate(`/app/flashcards/${id}`)}
-                    className={`flex justify-center items-center border border-solid border-slate-300 rounded-md px-2 h-7 sm:h-8
-                    ${isEditorEmpty
-                        ? "bg-slate-100 pointer-events-none"
-                            : "bg-white text-violet-600 hover:bg-violet-100"}`}>
-                    Flashcards
+                    className={`flex justify-center items-center border border-solid border-slate-300 rounded-md p-1 sm:p-2
+                        ${isEditorEmpty ? "bg-slate-100 pointer-events-none"
+                        : "bg-violet-600 text-white hover:bg-violet-500 transition-all"}`}
+                >
+                    <Zap
+                        size={16}
+                        className={`bg-transparent
+                            ${isEditorEmpty ? "pointer-events-none"
+                            : ""}
+                        `} />
+                    <p className="hidden sm:block ml-1 text-xs">Flashcards</p>
                 </button>
                 <button
                     disabled={isEditorEmpty}
                     title={isEditorEmpty ? "Ajoute du contenu pour activer le quiz" : ""}
                     onClick={() => setQuizOpen(true)}
-                    className={`flex justify-center items-center border border-solid border-slate-300 rounded-md px-2 h-7 sm:h-8
-                    ${isEditorEmpty
-                        ? "bg-slate-100 pointer-events-none"
-                            : "bg-white text-violet-600 hover:bg-violet-100"}`}>
-                    Quiz
+                    className={`flex justify-center items-center border border-solid border-slate-300 rounded-md p-1 sm:p-2
+                        ${isEditorEmpty ? "bg-slate-100 pointer-events-none"
+                        : "bg-violet-600 text-white hover:bg-violet-500 transition-all"}`}
+                >
+                    <LayoutList
+                        size={16}
+                        className={`bg-transparent
+                            ${isEditorEmpty ? "pointer-events-none"
+                            : ""}
+                        `} />
+                    <p className="hidden sm:block ml-1 text-xs">Quiz</p>
                 </button>
                 <AlertDialog open={quizOpen} onOpenChange={setQuizOpen}>
                     <AlertDialogContent>
@@ -221,9 +235,9 @@ export default function Toolbar({ editor, setLoadingQuiz }) {
                 <AlertDialogContent>
                     <AlertDialogHeader>
                         <AlertDialogTitle>Comment utiliser recall-io ?</AlertDialogTitle>
-                        <div className="flex items-center">
+                        <div className="flex items-center md:flex-row flex-col">
                             <img src={Slide4} className="w-auto h-36 mr-10 mt-5" />
-                            <AlertDialogDescription>
+                            <AlertDialogDescription className="text-left mt-5 md:m-0">
                                 Voici quelques conseils :
                                 <br/>• Ecris tes notes dans l'éditeur.
                                 <br />• Tes notes peuvent être dans n'importe quelle langue.

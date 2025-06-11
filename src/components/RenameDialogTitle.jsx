@@ -14,7 +14,7 @@ import { useState } from "react";
 import { Pencil } from "lucide-react";
 
 //IA-1-CODE: Explication de la logique pour passer d'un "pompt" au "AlertDialog" de shadcn-ui par ChatGPT (OpenAI)
-export default function RenameDialog({ item, onRename }) {
+export default function RenameDialogTitle({ item, onRename }) {
     const [open, setOpen] = useState(false);
     const [newName, setNewName] = useState(item.name);
 
@@ -24,13 +24,13 @@ export default function RenameDialog({ item, onRename }) {
             setOpen(false);
         }
     };
-
+    // IA-1-CODE: onKeyDown suggéré par ChatGPT (OpenAI)
     return (
         <AlertDialog open={open} onOpenChange={setOpen}>
             <AlertDialogTrigger asChild>
                 <button
                     title="Renommer"
-                    className="group bg-transparent m-0 p-0 pl-2 text-slate-400"
+                    className="group bg-transparent m-0 p-0 pl-2 text-slate-400 hidden md:block"
                     onClick={(e) => e.stopPropagation()}
                 >
                     <Pencil size={25} className="group-hover:text-violet-600" />
@@ -45,6 +45,11 @@ export default function RenameDialog({ item, onRename }) {
                     value={newName}
                     onChange={(e) => setNewName(e.target.value)}
                     onClick={(e) => e.stopPropagation()}
+                    onKeyDown={(e) => {
+                        if (e.key === "Enter") {
+                            handleConfirm();
+                        }
+                    }}
                 />
                 <AlertDialogFooter>
                     <AlertDialogCancel>Annuler</AlertDialogCancel>

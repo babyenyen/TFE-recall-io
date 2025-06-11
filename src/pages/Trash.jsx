@@ -1,5 +1,6 @@
 import useItems from "@/hooks/useItems";
 import { useEffect, useState } from "react";
+import { usePageTitle } from "@/components/PageTitleContext";
 import {
     Trash2,
     FolderClosed,
@@ -61,17 +62,21 @@ export default function Trash() {
 
     const [openDialog, setOpenDialog] = useState(false);
 
+    const { setPageTitle } = usePageTitle();
+    useEffect(() => { setPageTitle('Corbeille'); }, [setPageTitle]);
+
     return (
         <div className="p-4">
-            <div className="flex flex-wrap justify-between items-center gap-2 mb-2">
-                <h1>Corbeille</h1>
+            <div className="flex flex-wrap justify-end md:justify-between items-center gap-2 md:mb-2 mt-6 md:mt-0">
+                <h1 className="md:block hidden">Corbeille</h1>
                 {trashedItems.length > 0 && (
                     <AlertDialog open={openDialog} onOpenChange={setOpenDialog}>
                         <AlertDialogTrigger asChild>
                             <button
-                                className="flex items-center text-sm bg-red-500 text-slate-50 hover:bg-red-700 transition"
+                                className="flex items-center text-sm bg-red-100 hover:bg-red-200 text-red-600 transition-all"
                             >
-                                <BrushCleaning size={24} className="inline" />
+                                <BrushCleaning size={18} className="inline" />
+                                <p className="ml-2 hidden md:block">Sortir les poubelles</p>
                             </button>
                         </AlertDialogTrigger>
                         <AlertDialogContent>
@@ -108,7 +113,7 @@ export default function Trash() {
                             <CardTitle className="text-center text-base font-semibold text-violet-600">
                                 On a fait les poubelles
                             </CardTitle>
-                            <p className="text-sm text-center font-normal">Supprimer d'ici, c'est supprimer à jamais. </p>
+                            <p className="text-sm text-center font-normal">Supprimé d'ici, c'est supprimé à jamais. </p>
                         </CardHeader>
                     </Card>
                 ) : (

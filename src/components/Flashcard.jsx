@@ -1,5 +1,6 @@
 import { Card, CardContent } from "@/components/ui/card";
 
+//gestion du comportement du corps de la carte avec interaction
 export default function Flashcard({ question, answer, revealed, setRevealed }) {
     return (
         <Card
@@ -9,14 +10,14 @@ export default function Flashcard({ question, answer, revealed, setRevealed }) {
             {revealed ? (
                 <CardContent className="p-8 flex flex-col items-center justify-center text-center text-slate-700 min-h-[350px]">
                     <div>
-                        <span className="font-semibold text-violet-600">Réponse :</span><br />
+                        <span className="font-semibold text-violet-600">Réponse</span><br />
                         <span>{answer}</span>
                     </div>
                 </CardContent>
             ) : (
                 <CardContent className="bg-violet-50 rounded-xl p-8 flex flex-col items-center justify-center text-center text-slate-700 min-h-[350px]">
                     <div>
-                        <span className="font-semibold">Question :</span><br />
+                        <span className="font-semibold">Question</span><br />
                         <span>{question}</span>
                         </div>
                 </CardContent>

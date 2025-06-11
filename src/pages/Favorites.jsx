@@ -8,6 +8,8 @@ import {
 } from "@/components/ui/card";
 import useItems from "@/hooks/useItems";
 import noFavorites from "../assets/noFavorites.png"
+import { useEffect } from "react";
+import { usePageTitle } from "@/components/PageTitleContext";
 
 export default function Favorites() {
     const [items, setItems] = useItems();
@@ -46,9 +48,12 @@ export default function Favorites() {
         }
     };
 
+    const { setPageTitle } = usePageTitle();
+    useEffect(() => { setPageTitle('Favoris'); }, [setPageTitle]);
+
     return (
         <div className="p-4">
-            <h1>Favoris</h1>
+            <h1 className="md:block hidden">Favoris</h1>
             <div className="mt-6 grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 2xl:grid-cols-6 gap-4">
                 {favorites.length === 0 ? (
                     <Card className="border border-dotted border-violet-400 bg-slate-100">

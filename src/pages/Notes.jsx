@@ -8,6 +8,8 @@ import {
 } from "@/components/ui/card";
 import useItems from "@/hooks/useItems";
 import noFile from "../assets/noFile.png"
+import { useEffect } from "react";
+import { usePageTitle } from "@/components/PageTitleContext";
 
 export default function Notes() {
     // Hook personnalisé pour gérer les éléments (dossiers et fichiers)
@@ -49,9 +51,12 @@ export default function Notes() {
         }
     };
 
+    const { setPageTitle } = usePageTitle();
+    useEffect(() => { setPageTitle('Toutes les notes'); }, [setPageTitle]);
+
     return (
         <div className="p-4">
-            <h1>Toutes les notes</h1>
+            <h1 className="md:block hidden">Toutes les notes</h1>
             <div className="mt-6 grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 2xl:grid-cols-6 gap-4">
                 {notes.length === 0 ? (
                     <Card className="border border-dotted border-violet-400 bg-slate-100">

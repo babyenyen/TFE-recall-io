@@ -8,6 +8,7 @@ import {
     FolderClosed,
     File,
 } from "lucide-react";
+import { useEffect } from "react";
 import Breadcrumb from "@/components/ui/breadcrumb";
 import useItems from "@/hooks/useItems";
 import {
@@ -25,6 +26,8 @@ import {
 } from "@/components/ui/card";
 import RenameDialogCard from "@/components/RenameDialogCard";
 import RenameDialogTitle from "@/components/RenameDialogTitle";
+import { usePageTitle } from "@/components/PageTitleContext";
+import newFile from "../assets/newFile.png"
 
 export default function Folder() {
     // On récupère l'ID du dossier courant depuis les paramètres de l'URL
@@ -83,6 +86,23 @@ export default function Folder() {
         );
     };
 
+    const { setPageTitle } = usePageTitle();
+
+        useEffect(() => {
+            if (current) {
+                // Si l'item existe, utilise son nom comme titre
+                setPageTitle(current.name);
+            } else {
+                // Si l'item n'est pas trouvé, affiche un titre d'erreur ou par défaut
+                setPageTitle("Fichier Introuvable");
+            }
+        }, [setPageTitle, current]); // Dépend de 'current' pour que le titre se mette à jour si l'item (ou son nom) change
+        // -----------------------------------------------------
+
+        if (!current) {
+            return <div className="p-4">Fichier non trouvé</div>;
+        }
+
     return (
         <div className="w-full h-full p-4">
             <div className="flex flex-wrap items-baseline gap-2 mb-2">
@@ -99,7 +119,7 @@ export default function Folder() {
                                 );
                             }}
                             title="Favori"
-                            className="group bg-transparent m-0 p-0 pr-2 text-slate-400"
+                            className="group bg-transparent m-0 p-0 pr-2 text-slate-400 hidden md:block"
                         >
                             <Star
                                 size={38}
@@ -110,7 +130,7 @@ export default function Folder() {
                                 }
                             />
                         </button>
-                        <h1>{current?.name || "Dossier"}</h1>
+                        <h1 className="md:block hidden">{current?.name || "Dossier"}</h1>
                         <RenameDialogTitle
                             item={current}
                             onRename={renameItem}
@@ -139,58 +159,72 @@ export default function Folder() {
             </DropdownMenu>
 
             <div className="mt-6 grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 2xl:grid-cols-6 gap-4">
-                {folderItems.map((item) => (
-                    <Card
-                        key={item.id}
-                        onClick={() => navigate(`/app/${item.type}/${item.id}`)}
-                        className={item.type === "folder" ? "border  bg-violet-50 cursor-pointer hover:bg-violet-100 transition" : "cursor-pointer hover:bg-slate-50 transition"}
-                    >
-                        <CardContent className="flex justify-between p-0 text-slate-400">
-                            <button
-                                onClick={(e) => {
-                                    e.stopPropagation();
-                                    toggleFavorite(item.id);
-                                }}
-                                title="Favori"
-                                className="group bg-transparent m-0 p-4"
-                            >
-                                <Star
-                                    size={18}
-                                    className={
-                                        item.favorite
-                                            ? "fill-yellow-400 text-yellow-400"
-                                            : "group-hover:text-yellow-400"
-                                    }
-                                />
-                            </button>
-                            <button
-                                onClick={(e) => {
-                                    e.stopPropagation();
-                                    deleteItem(item.id);
-                                }}
-                                title="Supprimer"
-                                className="group bg-transparent m-0 p-4"
-                            >
-                                <Trash2 size={18} className="group-hover:text-red-500" />
-                            </button>
+                {folderItems.length === 0 ? (
+                    <Card className="border border-dotted border-violet-400 bg-slate-100">
+                        <CardContent className="flex justify-between text-slate-400 pt-6">
+                            <img src={newFile} alt="Nouveau fichier" className="w-auto h-32 mx-auto" />
                         </CardContent>
                         <CardHeader className="flex items-center flex-col space-y-2 pt-0">
-                            <div className="text-3xl">
-                                {item.type === "folder" ? (
-                                    <FolderClosed className="h-16 w-auto text-violet-700" />
-                                ) : (
-                                    <File className="h-16 w-auto text-violet-700" />
-                                )}
-                            </div>
-                            <div className="flex relative">
-                                <CardTitle className="text-center text-base font-normal">
-                                    {item.name}
-                                </CardTitle>
-                                <RenameDialogCard item={item} onRename={renameItem} />
-                            </div>
+                            <CardTitle className="text-center text-base font-semibold text-violet-600">
+                                Ce dossier est vide ...
+                            </CardTitle>
+                            <p className="text-sm text-center font-normal">Ajoute vite un élément.</p>
                         </CardHeader>
                     </Card>
-                ))}
+                ) : (
+                    folderItems.map((item) => (
+                        <Card
+                            key={item.id}
+                            onClick={() => navigate(`/app/${item.type}/${item.id}`)}
+                            className={item.type === "folder" ? "border  bg-violet-50 cursor-pointer hover:bg-violet-100 transition" : "cursor-pointer hover:bg-slate-50 transition"}
+                        >
+                            <CardContent className="flex justify-between p-0 text-slate-400">
+                                <button
+                                    onClick={(e) => {
+                                        e.stopPropagation();
+                                        toggleFavorite(item.id);
+                                    }}
+                                    title="Favori"
+                                    className="group bg-transparent m-0 p-4"
+                                >
+                                    <Star
+                                        size={18}
+                                        className={
+                                            item.favorite
+                                                ? "fill-yellow-400 text-yellow-400"
+                                                : "group-hover:text-yellow-400"
+                                        }
+                                    />
+                                </button>
+                                <button
+                                    onClick={(e) => {
+                                        e.stopPropagation();
+                                        deleteItem(item.id);
+                                    }}
+                                    title="Supprimer"
+                                    className="group bg-transparent m-0 p-4"
+                                >
+                                    <Trash2 size={18} className="group-hover:text-red-500" />
+                                </button>
+                            </CardContent>
+                            <CardHeader className="flex items-center flex-col space-y-2 pt-0">
+                                <div className="text-3xl">
+                                    {item.type === "folder" ? (
+                                        <FolderClosed className="h-16 w-auto text-violet-700" />
+                                    ) : (
+                                        <File className="h-16 w-auto text-violet-700" />
+                                    )}
+                                </div>
+                                <div className="flex relative">
+                                    <CardTitle className="text-center text-base font-normal">
+                                        {item.name}
+                                    </CardTitle>
+                                    <RenameDialogCard item={item} onRename={renameItem} />
+                                </div>
+                            </CardHeader>
+                        </Card>
+                    ))
+                )}
             </div>
         </div>
     );

@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect, useRef } from "react";
 import {
     ArrowBigRight,
     ArrowBigLeft,
@@ -34,9 +34,27 @@ const slides = [
 // IA-1-CODE: Correction de la fonction OnboardingCarousel par ChatGPT (OpenAI)
 export default function OnboardingCarousel() {
     const [index, setIndex] = useState(0);
+    const intervalRef = useRef(null);
 
     const nextSlide = () => setIndex((prev) => (prev + 1) % slides.length);
     const prevSlide = () => setIndex((prev) => (prev - 1 + slides.length) % slides.length);
+
+    const startAutoScroll = () => {
+        intervalRef.current = setInterval(() => {
+            setIndex((prev) => (prev + 1) % slides.length);
+        }, 5000);
+    };
+
+    const stopAutoScroll = () => {
+        if (intervalRef.current) {
+            clearInterval(intervalRef.current);
+        }
+    };
+
+    useEffect(() => {
+        startAutoScroll();
+        return () => stopAutoScroll();
+    }, []);
 
     return (
         <div className="w-full max-w-xl mx-auto my-5 px-6 text-center bg-transparent relative">

@@ -6,6 +6,7 @@ import Breadcrumb from "@/components/ui/breadcrumb";
 import { Button } from "@/components/ui/button";
 import { Undo2 } from "lucide-react";
 import { useNavigate } from "react-router-dom";
+import { usePageTitle } from "@/components/PageTitleContext";
 
 export default function Quiz() {
     // On récupère l'ID du quiz depuis les paramètres de l'URL
@@ -57,9 +58,26 @@ export default function Quiz() {
         return `${min}:${sec}`;
     };
 
+    const { setPageTitle } = usePageTitle();
+
+    useEffect(() => {
+        if (current) {
+            // Si l'item existe, utilise son nom comme titre
+            setPageTitle("(Quiz) " + current.name);
+        } else {
+            // Si l'item n'est pas trouvé, affiche un titre d'erreur ou par défaut
+            setPageTitle("Fichier Introuvable");
+        }
+    }, [setPageTitle, current]); // Dépend de 'current' pour que le titre se mette à jour si l'item (ou son nom) change
+    // -----------------------------------------------------
+
+    if (!current) {
+        return <div className="p-4">Fichier non trouvé</div>;
+    }
+
     return (
         <div className="p-4">
-            <h1>Quiz : {current?.name}</h1>
+            <h1 className="md:block hidden">Quiz : {current?.name}</h1>
             <Breadcrumb items={items} />
 
             {!quizStarted && (
@@ -101,8 +119,8 @@ export default function Quiz() {
 
             {quizStarted && (
                 <>
-                    <div className="sticky text-right -top-12 z-50 bg-transparent">
-                        <p className={`inline-block p-3 rounded-md text-lg ${timer <= 60 ? "bg-red-200" : "bg-violet-200"}`}>Temps restant :
+                    <div className="md:sticky absolute right-3 text-right top-3 md:top-0 z-50 bg-transparent">
+                        <p className={`inline-block p-3 rounded-md md:text-lg ${timer <= 60 ? "bg-red-200" : "bg-violet-200"}`}>Temps restant :
                             <span className={`font-semibold ${timer <= 60 ? "text-red-500" : "text-violet-500"}`}> {formatTime(timer)}</span>
                         </p>
                     </div>

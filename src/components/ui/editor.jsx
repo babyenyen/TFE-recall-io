@@ -1,4 +1,5 @@
 import { useEditor, EditorContent } from "@tiptap/react";
+import CharacterCount from "@tiptap/extension-character-count";
 import StarterKit from "@tiptap/starter-kit";
 import Underline from "@tiptap/extension-underline";
 import Placeholder from "@tiptap/extension-placeholder";
@@ -10,10 +11,11 @@ export default function Editor({ content, onChange, setLoadingQuiz }) {
             StarterKit,
             Underline,
             Placeholder.configure({
-                placeholder: "Écris tes note ici...",
+                placeholder: "Écris tes notes ici...",
                 emptyEditorClass:
                     "before:text-slate-400 before:content-[attr(data-placeholder)] before:italic",
             }),
+            CharacterCount.configure(),
         ],
         content,
         onUpdate: ({ editor }) => {
@@ -22,15 +24,20 @@ export default function Editor({ content, onChange, setLoadingQuiz }) {
         editorProps: {
             attributes: {
                 class:
-                    "min-h-[200px] border border-slate-300 rounded-lg p-4 outline-none focus:ring-2 focus:ring-primary text-sm bg-white",
+                    "prose prose-sm max-w-none h-[570px] md:h-[600px] overflow-auto p-4 border border-slate-300 rounded-lg bg-white focus:outline-none focus:ring-2 focus:ring-primary text-sm",
             },
         },
     });
 
     return (
-        <div className="mb-5">
-            <Toolbar setLoadingQuiz={setLoadingQuiz}  editor={editor} />
+        <div className="flex flex-col gap-2">
+            <Toolbar setLoadingQuiz={setLoadingQuiz} editor={editor} />
             <EditorContent editor={editor} />
+            {editor && (
+                <div className="text-right text-xs text-slate-400">
+                    {editor.storage.characterCount.characters()} caractères | {editor.storage.characterCount.words()} mots
+                </div>
+            )}
         </div>
     );
 }

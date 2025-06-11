@@ -24,9 +24,10 @@ import {
 } from "@/components/ui/card";
 import RenameDialogCard from "@/components/RenameDialogCard";
 import { useNavigate } from "react-router-dom";
-import { getUser } from "@/utils/auth"; // adapte le chemin si besoin
+import { getUser } from "@/utils/auth";
 import { useEffect, useState } from "react";
 import newFile from "../assets/newFile.png"
+import { usePageTitle } from "@/components/PageTitleContext";
 
 export default function Dashboard() {
     // Hook personnalisé pour gérer les éléments (dossiers et fichiers)
@@ -97,9 +98,17 @@ export default function Dashboard() {
         (item) => !item.deleted && !item.parentId
     );
 
+    const { setPageTitle } = usePageTitle();
+
+    useEffect(() => {
+        // on met à jour le titre de la page dynamiquement
+        const dynamicTitle = `Bienvenue ${user?.username ?? "à toi"} !`;
+        setPageTitle(dynamicTitle);
+    }, [setPageTitle, user]); // on ajoute 'user' comme dépendance pour mettre à jour le titre si l'utilisateur change
+
     return (
         <div className="w-full h-full p-4">
-            <h1>Bienvenue {user?.username ?? "à toi"} !</h1>
+            <h1 className="md:block hidden" >Bienvenue {user?.username ?? "à toi"} !</h1>
             <Breadcrumb items={items} />
             {/* Bouton + menu */}
             <DropdownMenu>
@@ -119,7 +128,6 @@ export default function Dashboard() {
                 </DropdownMenuContent>
             </DropdownMenu>
 
-            {/* Grille d’éléments */}
             <div className="mt-6 grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 2xl:grid-cols-6 gap-4">
                 {rootVisibleItems.length === 0 ? (
                     <Card className="border border-dotted border-violet-400 bg-slate-100">
