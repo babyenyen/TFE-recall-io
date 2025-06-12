@@ -10,6 +10,7 @@ import useItems from "@/hooks/useItems";
 import noFavorites from "../assets/noFavorites.png"
 import { useEffect } from "react";
 import { usePageTitle } from "@/components/PageTitleContext";
+import { deleteItemSmart } from "@/utils/items";
 
 export default function Favorites() {
     const [items, setItems] = useItems();
@@ -29,11 +30,7 @@ export default function Favorites() {
 
     // Fonction pour supprimer un élément (le marquer comme supprimé)
     const deleteItem = (id) => {
-        setItems((prev) =>
-            prev.map((item) =>
-                item.id === id ? { ...item, deleted: true } : item
-            )
-        );
+        setItems((prev) => deleteItemSmart(id, prev));
     };
 
     // Fonction pour renommer un élément

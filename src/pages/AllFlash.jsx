@@ -84,18 +84,16 @@ export default function AllFlash() {
                         {packs.map((pack) => (
                             <li
                                 key={pack.id}
-                                className="flex justify-between md:items-center cursor-pointer p-2 border rounded-md bg-white hover:bg-slate-50 transition"
+                                className="flex justify-between md:items-center cursor-pointer py-2 px-3 border rounded-md bg-white hover:bg-slate-50 transition"
                                 onClick={() => navigate(`/app/flashcards/${pack.id}`)}
                             >
-                                <div className="flex flex-col md:flex-row gap-2 md:items-center">
+                                <div>
                                     <p className="font-medium">
                                         {pack.name} </p>
-                                    <p className="text-sm text-slate-500">{pack.count} cartes</p>
+                                    <p className="text-sm text-slate-500">{pack.count} cartes • {pack.createdAt && ` créé le ${formatDate(pack.createdAt)}`}
+                                    </p>
                                 </div>
                                 <div className="flex flex-col-reverse md:flex-row gap-2 md:items-center items-end">
-                                    <p className="text-xs text-slate-500">
-                                        {pack.createdAt && `créé le ${formatDate(pack.createdAt)}`}
-                                    </p>
                                     <button
                                         onClick={(e) => {
                                             e.stopPropagation(); // évite que le click ouvre la page

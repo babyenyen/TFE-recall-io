@@ -64,18 +64,15 @@ export default function AllQuiz() {
                             <li
                                 key={q.id}
                                 onClick={() => navigate(`/app/quiz-validated/${q.id}`)}
-                                className="flex justify-between md:items-center cursor-pointer p-2 border rounded-md bg-white hover:bg-slate-50 transition"
+                                className="flex justify-between md:items-center cursor-pointer py-2 px-3 border rounded-md bg-white hover:bg-slate-50 transition"
                             >
-                                <div className="flex flex-col md:flex-row gap-2 md:items-center">
-                                    <p className="font-medium">{q.name}</p>
+                                <div>
+                                    <p className="font-medium truncate max-w-[170px] overflow-hidden whitespace-nowrap">{q.name}</p>
                                     <p className="text-sm text-slate-500">
-                                        {q.score}/{q.total} correctes
+                                        {q.score}/{q.total} correctes • corrigé le {formatDate(q.validatedAt)}
                                     </p>
                                 </div>
-                                <div className="flex flex-col-reverse md:flex-row gap-2 md:items-center items-end">
-                                    <p className="text-xs text-slate-500">
-                                        corrigé le {formatDate(q.validatedAt)}
-                                    </p>
+                                <div className="flex flex-col md:flex-row gap-2 md:items-center">
                                     <button
                                         onClick={(e) => {
                                             e.stopPropagation();

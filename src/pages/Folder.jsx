@@ -28,6 +28,7 @@ import RenameDialogCard from "@/components/RenameDialogCard";
 import RenameDialogTitle from "@/components/RenameDialogTitle";
 import { usePageTitle } from "@/components/PageTitleContext";
 import newFile from "../assets/newFile.png"
+import { deleteItemSmart } from "@/utils/items";
 
 export default function Folder() {
     // On récupère l'ID du dossier courant depuis les paramètres de l'URL
@@ -77,11 +78,7 @@ export default function Folder() {
 
     // Supprimer un élément (marqué comme supprimé)
     const deleteItem = (id) => {
-        setItems((prev) =>
-            prev.map((item) =>
-                item.id === id ? { ...item, deleted: true } : item
-            )
-        );
+        setItems((prev) => deleteItemSmart(id, prev));
     };
 
     // Renommer un élément
@@ -111,7 +108,7 @@ export default function Folder() {
     }
 
     return (
-        <div className="w-full h-full p-4">
+        <div className="p-4">
             <div className="flex flex-wrap items-baseline gap-2 mb-2">
                 {current && (
                     <>

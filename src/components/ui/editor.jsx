@@ -5,8 +5,9 @@ import Underline from "@tiptap/extension-underline";
 import Placeholder from "@tiptap/extension-placeholder";
 import Toolbar from "../Toolbar";
 
-export default function Editor({ content, onChange, setLoadingQuiz }) {
+export default function Editor({ content, onChange, setLoadingQuiz, editable = true, showToolbar = true }) {
     const editor = useEditor({
+        editable,
         extensions: [
             StarterKit,
             Underline,
@@ -19,7 +20,9 @@ export default function Editor({ content, onChange, setLoadingQuiz }) {
         ],
         content,
         onUpdate: ({ editor }) => {
-            onChange?.(editor.getHTML());
+            if (editable) {
+                onChange?.(editor.getHTML());
+            }
         },
         editorProps: {
             attributes: {
@@ -31,7 +34,7 @@ export default function Editor({ content, onChange, setLoadingQuiz }) {
 
     return (
         <div className="flex flex-col gap-2">
-            <Toolbar setLoadingQuiz={setLoadingQuiz} editor={editor} />
+            {showToolbar && <Toolbar setLoadingQuiz={setLoadingQuiz} editor={editor} />}
             <EditorContent editor={editor} />
             {editor && (
                 <div className="text-right text-xs text-slate-400">

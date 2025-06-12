@@ -28,6 +28,7 @@ import { getUser } from "@/utils/auth";
 import { useEffect, useState } from "react";
 import newFile from "../assets/newFile.png"
 import { usePageTitle } from "@/components/PageTitleContext";
+import { deleteItemSmart } from "@/utils/items";
 
 export default function Dashboard() {
     // Hook personnalisé pour gérer les éléments (dossiers et fichiers)
@@ -78,11 +79,7 @@ export default function Dashboard() {
 
     // Supprimer un élément (marqué comme supprimé)
     const deleteItem = (id) => {
-        setItems((prev) =>
-            prev.map((item) =>
-                item.id === id ? { ...item, deleted: true } : item
-            )
-        );
+        setItems((prev) => deleteItemSmart(id, prev));
     };
 
     // Renommer un élément

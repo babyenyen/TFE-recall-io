@@ -14,6 +14,8 @@ import WelcomePage from "./pages/WelcomePage";
 import AllFlash from "./pages/AllFlash";
 import AllQuiz from "./pages/AllQuiz";
 import QuizValidated from "./pages/QuizValidated";
+import TrashFolder from "./pages/TrashFolder";
+import TrashFile from "./pages/TrashFile";
 
 // IA-1-CODE: Explication de Router par ChatGPT (OpenAI)
 export default function App() {
@@ -30,6 +32,9 @@ export default function App() {
           <Route path="favorites" element={<Favorites />} />
           <Route path="notes" element={<Notes />} />
           <Route path="trash" element={<Trash />} />
+          <Route path="/app/trash/folder/:id" element={<TrashFolder />} />
+          <Route path="/app/trash/file/:id" element={<TrashFile />} />
+          {/* Routes pour les pages principales */}
           <Route path="all-flash" element={<AllFlash />} />
           <Route path="all-quiz" element={<AllQuiz />} />
           {/* Routes dynamiques pour les éléments */}

@@ -1,14 +1,8 @@
+import { useParams, useNavigate } from "react-router-dom";
+import { FolderClosed, File, Trash2 } from "lucide-react";
 import useItems from "@/hooks/useItems";
 import { useEffect, useState } from "react";
 import { usePageTitle } from "@/components/PageTitleContext";
-import {
-    Trash2,
-    FolderClosed,
-    File,
-    Undo2,
-    BrushCleaning,
-} from "lucide-react";
-import { useNavigate } from "react-router-dom";
 import {
     AlertDialog,
     AlertDialogTrigger,
@@ -20,10 +14,7 @@ import {
     AlertDialogCancel,
     AlertDialogAction,
 } from "@/components/ui/alert-dialog";
-import noTrash from "../assets/noTrash.png";
-import { restoreItemSmart } from "@/utils/items";
 
-// Fonction récursive pour compter les enfants supprimés d’un dossier
 function countDeletedChildrenRecursively(id, items) {
     let folderCount = 0;
     let fileCount = 0;
@@ -46,39 +37,26 @@ function countDeletedChildrenRecursively(id, items) {
     return { folderCount, fileCount };
 }
 
-export default function Trash() {
+export default function TrashFolder() {
+    const { id } = useParams();
+    const navigate = useNavigate();
     const [items, setItems] = useItems();
     const [openDialog, setOpenDialog] = useState(false);
     const [selectedItemId, setSelectedItemId] = useState(null);
-    const navigate = useNavigate();
     const { setPageTitle } = usePageTitle();
 
-    useEffect(() => {
-        setPageTitle("Corbeille");
-    }, [setPageTitle]);
-
-    useEffect(() => {
-        const saved = localStorage.getItem("recall-dashboard");
-        if (saved) setItems(JSON.parse(saved));
-    }, [setItems]);
-
-    useEffect(() => {
-        localStorage.setItem("recall-dashboard", JSON.stringify(items));
-    }, [items]);
-
-    const permanentlyDelete = (id) => {
-        const filtered = items.filter((item) => item.id !== id);
-        setItems(filtered);
-    };
-
-    const restoreItem = (id) => {
-        setItems((prev) => restoreItemSmart(id, prev));
-    };
-
-    const trashedItems = items.filter(
-        (item) =>
-            item.deleted && !items.find((p) => p.id === item.parentId && p.deleted)
+    const current = items.find((item) => item.id === id);
+    const children = items.filter(
+        (item) => item.parentId === id && item.deleted
     );
+
+    useEffect(() => {
+        if (current) setPageTitle(current.name || "Corbeille");
+    }, [current, setPageTitle]);
+
+    const permanentlyDeleteItem = (id) => {
+        setItems((prev) => prev.filter((item) => item.id !== id));
+    };
 
     const getWordCountFromHTML = (html) => {
         const tempDiv = document.createElement("div");
@@ -89,44 +67,15 @@ export default function Trash() {
 
     return (
         <div className="p-4">
-            <div className="flex justify-end md:justify-between items-center gap-2 md:mb-2 md:mt-0">
-                <h1 className="md:block hidden">Corbeille</h1>
-                {trashedItems.length > 0 && (
-                    <button
-                        onClick={() => {
-                            setSelectedItemId(null); // => signifie suppression globale
-                            setOpenDialog(true);
-                        }}
-                        className="absolute md:static top-4 z-30 flex items-center text-sm bg-red-100 hover:bg-red-200 text-red-600 transition-all"
-                    >
-                        <BrushCleaning size={18} className="inline" />
-                        <p className="ml-2 hidden md:block">Sortir les poubelles</p>
-                    </button>
-                )}
-            </div>
+            <h1 className="md:block hidden truncate max-w-[750px] overflow-hidden whitespace-nowrap">{current?.name || "Corbeille"}</h1>
+            <span className="text-xs text-slate-400 italic">Dossier en corbeille</span>
 
-            <div className="mt-6">
+            <div className="mt-2">
                 <ul className="space-y-2">
-                    {trashedItems.length === 0 ? (
-                        <li className="border border-dotted border-violet-400 bg-slate-100 rounded-lg">
-                            <div className="flex justify-between text-slate-400 pt-6">
-                                <img
-                                    src={noTrash}
-                                    alt="Nouveau fichier"
-                                    className="w-auto h-32 mx-auto"
-                                />
-                            </div>
-                            <div className="flex items-center flex-col space-y-2 pb-5">
-                                <div className="text-center text-base font-semibold text-violet-600">
-                                    On a fait les poubelles
-                                </div>
-                                <p className="text-sm text-center font-normal">
-                                    Supprimé d'ici, c'est supprimé à jamais.
-                                </p>
-                            </div>
-                        </li>
+                    {children.length === 0 ? (
+                        <p className="text-slate-400 text-center">Ce dossier est vide.</p>
                     ) : (
-                        trashedItems.map((item) => {
+                        children.map((item) => {
                             let folderCount = 0;
                             let fileCount = 0;
 
@@ -135,7 +84,6 @@ export default function Trash() {
                                 folderCount = result.folderCount;
                                 fileCount = result.fileCount;
                             }
-
                             return (
                                 <li
                                     key={item.id}
@@ -146,7 +94,10 @@ export default function Trash() {
                                             navigate(`/app/trash/file/${item.id}`);
                                         }
                                     }}
-                                    className={`flex justify-between md:items-center cursor-pointer py-2 px-3 border border-solid rounded-md border-slate-200 bg-white hover:bg-slate-50 transition`}
+                                    className={`flex justify-between md:items-center cursor-pointer py-2 px-3 border border-solid rounded-md ${item.type === "folder"
+                                        ? "border-violet-200 bg-violet-50 hover:bg-violet-100"
+                                        : "border-slate-200 bg-white hover:bg-slate-50"
+                                        } transition`}
                                 >
                                     <div className="flex flex-col md:flex-row gap-2 md:items-center">
                                         <div className="flex gap-3 items-center">
@@ -156,7 +107,7 @@ export default function Trash() {
                                                 {item.type === "folder" ? (
                                                     <FolderClosed className="h-5 w-5 m-2 text-white" />
                                                 ) : (
-                                                    <File className="h-5 w-5 m-2 text-violet-600" />
+                                                        <File className="h-5 w-5 m-2 text-violet-600" />
                                                 )}
                                             </div>
                                             <div className="">
@@ -166,26 +117,16 @@ export default function Trash() {
                                                         {folderCount} dossier{folderCount > 1 ? "s" : ""} –{" "}
                                                         {fileCount} note{fileCount > 1 ? "s" : ""}
                                                     </p>
-                                                ):(
-                                                        <p className="text-sm text-slate-500">
-                                                            {getWordCountFromHTML(item.content)} mot{getWordCountFromHTML(item.content) > 1 ? "s" : ""}
+                                                ) : (
+                                                    <p className="text-sm text-slate-500">
+                                                        {getWordCountFromHTML(item.content)} mot{getWordCountFromHTML(item.content) > 1 ? "s" : ""}
                                                     </p>
                                                 )}
                                             </div>
                                         </div>
                                     </div>
-                                    <div className="flex items-start gap-2 justify-between p-0 text-slate-400">
-                                        <button
-                                            onClick={(e) => {
-                                                e.stopPropagation();
-                                                restoreItem(item.id);
-                                            }}
-                                            title="Restaurer"
-                                            className="flex justify-center items-center rounded-md p-1 sm:p-2 bg-green-100 hover:bg-green-200 text-green-600 transition-all h-fit"
-                                        >
-                                            <Undo2 size={16} />
-                                            <p className="hidden sm:block ml-1 text-xs">Restaurer</p>
-                                        </button>
+
+                                    <div className="flex items-start p-0 text-slate-400">
                                         <button
                                             onClick={(e) => {
                                                 e.stopPropagation();
@@ -193,7 +134,7 @@ export default function Trash() {
                                                 setOpenDialog(true);
                                             }}
                                             title="Supprimer définitivement"
-                                            className="flex justify-center items-center rounded-md p-1 sm:p-2 bg-red-100 hover:bg-red-200 text-red-600 transition-all h-fit"
+                                            className="flex justify-center items-center rounded-md p-1 sm:p-2 bg-red-100 hover:bg-red-200 text-red-600 transition-all"
                                         >
                                             <Trash2 size={16} />
                                             <p className="hidden sm:block ml-1 text-xs">
@@ -210,13 +151,9 @@ export default function Trash() {
             <AlertDialog open={openDialog} onOpenChange={setOpenDialog}>
                 <AlertDialogContent>
                     <AlertDialogHeader>
-                        <AlertDialogTitle>
-                            {selectedItemId ? "Supprimer définitivement cet élément ?" : "Sortir les poubelles ?"}
-                        </AlertDialogTitle>
+                        <AlertDialogTitle>Supprimer définitivement ?</AlertDialogTitle>
                         <AlertDialogDescription>
-                            {selectedItemId
-                                ? "Cette action est irréversible. L’élément sera supprimé définitivement."
-                                : "Cette action est irréversible. Tous les éléments de la corbeille seront supprimés définitivement."}
+                            Cette action est irréversible. L’élément sera supprimé définitivement.
                         </AlertDialogDescription>
                     </AlertDialogHeader>
                     <AlertDialogFooter>
@@ -225,11 +162,9 @@ export default function Trash() {
                             className="bg-red-500 hover:bg-red-700"
                             onClick={() => {
                                 if (selectedItemId) {
-                                    permanentlyDelete(selectedItemId);
-                                } else {
-                                    const remaining = items.filter((item) => !item.deleted);
-                                    setItems(remaining);
+                                    permanentlyDeleteItem(selectedItemId);
                                 }
+                                setSelectedItemId(null);
                                 setOpenDialog(false);
                             }}
                         >
