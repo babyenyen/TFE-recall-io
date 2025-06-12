@@ -56,7 +56,7 @@ export default function AllQuiz() {
         <div className="p-4">
             <h1 className="md:block hidden">Tous les quiz corrigés</h1>
             {quizzes.length === 0 ? (
-                <p className="text-slate-500">Aucun quiz validé. Lance un quiz depuis une page de fichier.</p>
+                <p className="text-slate-500">Aucune correction de quiz. Lance un quiz depuis une de tes notes.</p>
             ) : (
                 <div className="mt-6">
                     <ul className="space-y-2">

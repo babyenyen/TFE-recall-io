@@ -50,13 +50,16 @@ export default function Folder() {
     // Ajout d'un nouvel élément (dossier ou fichier)
     const handleAdd = (type) => {
         const id = crypto.randomUUID();
+        const now = new Date().toISOString();
         const newItem = {
             id,
             type,
             name: type === "folder" ? "Nouveau dossier" : "Nouveau fichier",
             favorite: false,
             deleted: false,
-            parentId: currentFolderId, // 🔑 important
+            parentId: currentFolderId,
+            createdAt: now,
+            updatedAt: now,
         };
         setItems((prev) => [...prev, newItem]);
         setNewItemId(id);
@@ -101,7 +104,6 @@ export default function Folder() {
             setPageTitle("Fichier Introuvable");
         }
     }, [setPageTitle, current]); // Dépend de 'current' pour que le titre se mette à jour si l'item (ou son nom) change
-    // -----------------------------------------------------
 
     if (!current) {
         return <div className="p-4">Fichier non trouvé</div>;
@@ -176,63 +178,73 @@ export default function Folder() {
                         </CardHeader>
                     </Card>
                 ) : (
-                    folderItems.map((item) => (
-                        <Card
-                            key={item.id}
-                            onClick={() => navigate(`/app/${item.type}/${item.id}`)}
-                            className={item.type === "folder" ? "border  bg-violet-50 cursor-pointer hover:bg-violet-100 transition" : "cursor-pointer hover:bg-slate-50 transition"}
-                        >
-                            <CardContent className="flex justify-between p-0 text-slate-400">
-                                <button
-                                    onClick={(e) => {
-                                        e.stopPropagation();
-                                        toggleFavorite(item.id);
-                                    }}
-                                    title="Favori"
-                                    className="group bg-transparent m-0 p-4"
+                        folderItems.map((item) => {
+                            const formattedDate = new Date(item.updatedAt).toLocaleString("fr-FR", {
+                                year: "numeric",
+                                month: "short",
+                                day: "numeric",
+                                hour: "2-digit",
+                                minute: "2-digit"
+                            });
+                            return (
+                                <Card
+                                    key={item.id}
+                                    onClick={() => navigate(`/app/${item.type}/${item.id}`)}
+                                    className={item.type === "folder" ? "border  bg-violet-50 cursor-pointer hover:bg-violet-100 transition" : "cursor-pointer hover:bg-slate-50 transition"}
                                 >
-                                    <Star
-                                        size={18}
-                                        className={
-                                            item.favorite
-                                                ? "fill-yellow-400 text-yellow-400"
-                                                : "group-hover:text-yellow-400"
-                                        }
-                                    />
-                                </button>
-                                <button
-                                    onClick={(e) => {
-                                        e.stopPropagation();
-                                        deleteItem(item.id);
-                                    }}
-                                    title="Supprimer"
-                                    className="group bg-transparent m-0 p-4"
-                                >
-                                    <Trash2 size={18} className="group-hover:text-red-500" />
-                                </button>
-                            </CardContent>
-                            <CardHeader className="flex items-center flex-col space-y-2 pt-0">
-                                <div className="text-3xl">
-                                    {item.type === "folder" ? (
-                                        <FolderClosed className="h-16 w-auto text-violet-700" />
-                                    ) : (
-                                        <File className="h-16 w-auto text-violet-700" />
-                                    )}
-                                </div>
-                                <div className="flex relative">
-                                    <CardTitle className="text-center text-base font-normal truncate max-w-[140px] overflow-hidden whitespace-nowrap">
-                                        {item.name}
-                                    </CardTitle>
-                                    <RenameDialogCard
-                                        item={item}
-                                        onRename={renameItem}
-                                        onCancel={handleCancelRename}
-                                        forceOpen={item.id === newItemId}
-                                    />
-                                </div>
-                            </CardHeader>
-                        </Card>
-                    ))
+                                    <CardContent className="flex justify-between p-0 text-slate-400">
+                                        <button
+                                            onClick={(e) => {
+                                                e.stopPropagation();
+                                                toggleFavorite(item.id);
+                                            }}
+                                            title="Favori"
+                                            className="group bg-transparent m-0 p-4"
+                                        >
+                                            <Star
+                                                size={18}
+                                                className={
+                                                    item.favorite
+                                                        ? "fill-yellow-400 text-yellow-400"
+                                                        : "group-hover:text-yellow-400"
+                                                }
+                                            />
+                                        </button>
+                                        <button
+                                            onClick={(e) => {
+                                                e.stopPropagation();
+                                                deleteItem(item.id);
+                                            }}
+                                            title="Supprimer"
+                                            className="group bg-transparent m-0 p-4"
+                                        >
+                                            <Trash2 size={18} className="group-hover:text-red-500" />
+                                        </button>
+                                    </CardContent>
+                                    <CardHeader className="flex items-center flex-col space-y-2 pt-0">
+                                        <div className="text-3xl">
+                                            {item.type === "folder" ? (
+                                                <FolderClosed className="h-16 w-auto text-violet-700" />
+                                            ) : (
+                                                <File className="h-16 w-auto text-violet-700" />
+                                            )}
+                                        </div>
+                                        <div className="flex relative">
+                                            <CardTitle className="text-center text-base font-normal truncate max-w-[140px] overflow-hidden whitespace-nowrap">
+                                                {item.name}
+                                            </CardTitle>
+                                            <RenameDialogCard
+                                                item={item}
+                                                onRename={renameItem}
+                                                onCancel={handleCancelRename}
+                                                forceOpen={item.id === newItemId}
+                                            />
+                                        </div>
+                                        <p className="text-xs text-slate-400">Modifié le {formattedDate}</p>
+                                    </CardHeader>
+                                </Card>
+                        );
+                    })
                 )}
             </div>
         </div>

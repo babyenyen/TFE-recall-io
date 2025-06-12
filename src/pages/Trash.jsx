@@ -151,7 +151,7 @@ export default function Trash() {
                                     <div className="flex flex-col md:flex-row gap-2 md:items-center">
                                         <div className="flex gap-3 items-center">
                                             <div className={`rounded-md
-                                            ${item.type === "folder" ? "bg-violet-600 " : "bg-slate-100 border border-solid border-violet-200"}
+                                            ${item.type === "folder" ? "bg-violet-600 " : "bg-violet-100 border border-solid border-violet-200"}
                                             `}>
                                                 {item.type === "folder" ? (
                                                     <FolderClosed className="h-5 w-5 m-2 text-white" />

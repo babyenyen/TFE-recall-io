@@ -9,6 +9,24 @@ import loaderAnimation from "@/assets/animations/loader.json";
 import RenameDialogTitle from "@/components/RenameDialogTitle";
 import { usePageTitle } from "@/components/PageTitleContext"; // Ensure correct path
 
+function updateAncestors(itemId, items, updatedAt) {
+    const updatedItems = [...items];
+    let current = items.find((i) => i.id === itemId);
+
+    while (current?.parentId) {
+        const parentIndex = updatedItems.findIndex(i => i.id === current.parentId);
+        if (parentIndex === -1) break;
+
+        updatedItems[parentIndex] = {
+            ...updatedItems[parentIndex],
+            updatedAt
+        };
+        current = updatedItems[parentIndex];
+    }
+
+    return updatedItems;
+}
+
 export default function FilePage() {
     const { id } = useParams();
     // on récupère les items depuis le hook useItems
@@ -90,11 +108,17 @@ export default function FilePage() {
                 content={current.content || ""}
                 // onChange met à jour le contenu de l'item en cours qu'on stocke dans useItems
                 onChange={(value) => {
-                    setItems((prev) =>
-                        prev.map((item) =>
-                            item.id === current.id ? { ...item, content: value } : item
-                        )
-                    );
+                    const now = new Date().toISOString();
+                    setItems((prev) => {
+                        let updated = prev.map((item) =>
+                            item.id === current.id
+                                ? { ...item, content: value, updatedAt: now }
+                                : item
+                        );
+                        // Met à jour le parent direct
+                        updated = updateAncestors(current.id, updated, now);
+                        return updated;
+                    });
                 }}
             />
         </div>
