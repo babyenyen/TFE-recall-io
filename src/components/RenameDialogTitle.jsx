@@ -42,6 +42,7 @@ export default function RenameDialogTitle({ item, onRename }) {
                     <AlertDialogDescription>Entre le nouveau nom :</AlertDialogDescription>
                 </AlertDialogHeader>
                 <Input
+                    autoFocus
                     value={newName}
                     onChange={(e) => setNewName(e.target.value)}
                     onClick={(e) => e.stopPropagation()}

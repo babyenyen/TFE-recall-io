@@ -37,7 +37,10 @@ export default function RenameDialogCard({ item, onRename, onCancel , forceOpen 
     };
     // IA-1-CODE: onKeyDown suggéré par ChatGPT (OpenAI)
     return (
-        <AlertDialog open={open} onOpenChange={setOpen}>
+        <AlertDialog
+            open={open}
+            onOpenChange={setOpen}
+        >
             <AlertDialogTrigger asChild>
                 <button
                     title="Renommer"
@@ -53,6 +56,7 @@ export default function RenameDialogCard({ item, onRename, onCancel , forceOpen 
                     <AlertDialogDescription>Entre le nouveau nom :</AlertDialogDescription>
                 </AlertDialogHeader>
                 <Input
+                    autoFocus
                     value={newName}
                     onChange={(e) => setNewName(e.target.value)}
                     onClick={(e) => e.stopPropagation()}

@@ -150,13 +150,16 @@ export default function Dashboard() {
                     </Card>
                 ) : (
                         rootVisibleItems.map((item) => {
-                            const formattedDate = new Date(item.updatedAt).toLocaleString("fr-FR", {
-                                year: "numeric",
-                                month: "short",
-                                day: "numeric",
-                                hour: "2-digit",
-                                minute: "2-digit"
-                            });
+                            const date = new Date(item.updatedAt || item.createdAt || Date.now());
+                            const formattedDate = isNaN(date.getTime())
+                                ? "—"
+                                : date.toLocaleString("fr-FR", {
+                                    year: "numeric",
+                                    month: "short",
+                                    day: "numeric",
+                                    hour: "2-digit",
+                                    minute: "2-digit",
+                                });
                             return (
                                 <Card
                                     key={item.id}
