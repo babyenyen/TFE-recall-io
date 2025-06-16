@@ -35,7 +35,7 @@ export default function Editor({ content, onChange, setLoadingQuiz, editable = t
     return (
         <div className="flex flex-col gap-2">
             {showToolbar && <Toolbar setLoadingQuiz={setLoadingQuiz} editor={editor} />}
-            <EditorContent editor={editor} />
+            <EditorContent editor={editor} className="text-[16px]"/>
             {editor && (
                 <div className="text-right text-xs text-slate-400">
                     {editor.storage.characterCount.characters()} caractères | {editor.storage.characterCount.words()} mots

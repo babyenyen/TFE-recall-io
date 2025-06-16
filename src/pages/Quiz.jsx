@@ -78,7 +78,7 @@ export default function Quiz() {
     return (
         <div className="p-4">
             <h1 className="md:block hidden truncate max-w-[750px] overflow-hidden whitespace-nowrap">(Quiz) {current?.name}</h1>
-            <Breadcrumb items={items} />
+            {/* <Breadcrumb items={items} /> */}
 
             {!quizStarted && (
                 // Expliquer le fonctionnement du quiz
@@ -119,8 +119,9 @@ export default function Quiz() {
 
             {quizStarted && (
                 <>
-                    <div className="md:sticky absolute right-3 text-right top-3 md:top-0 z-50 bg-transparent">
-                        <p className={`inline-block p-3 rounded-md md:text-lg ${timer <= 60 ? "bg-red-200" : "bg-violet-200"}`}>Temps restant :
+                    <div className="md:sticky absolute right-3 top-3 md:top-0 z-50 bg-transparent flex justify-end">
+                        <p className={`flex gap-2 p-3 w-fit rounded-md md:text-lg ${timer <= 60 ? "bg-red-200" : "bg-violet-200"}`}>
+                            <span className="hidden md:block">Temps restant :</span>
                             <span className={`font-semibold ${timer <= 60 ? "text-red-500" : "text-violet-500"}`}> {formatTime(timer)}</span>
                         </p>
                     </div>

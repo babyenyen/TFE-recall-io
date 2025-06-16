@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { Button } from "@/components/ui/button";
 import { useParams, useNavigate } from "react-router-dom";
 import {
@@ -14,23 +14,31 @@ export default function QuizDisplay({ quiz, quizValidated, setQuizValidated }) {
     const navigate = useNavigate();
     const { id } = useParams();
 
-    let score = 0;
+    const [score, setScore] = useState(0);
     const total = quiz.length;
 
-    if (quizValidated) {
-        score = quiz.reduce((acc, q) => {
-            const s = q.selected;
-            if (Array.isArray(q.correct)) {
-                const allCorrect =
-                    Array.isArray(s) &&
-                    s.length === q.correct.length &&
-                    s.every((i) => q.correct.includes(i));
-                return acc + (allCorrect ? 1 : 0);
-            } else {
-                return acc + (s === q.correct ? 1 : 0);
-            }
-        }, 0);
-    }
+    useEffect(() => {
+        if (quizValidated) {
+            const computed = quiz.map((q, index) => ({
+                ...q,
+                selected: selectedAnswers[index] ?? (Array.isArray(q.correct) ? [] : null),
+            }));
+
+            const newScore = computed.reduce((acc, q) => {
+                const s = q.selected;
+                if (Array.isArray(q.correct)) {
+                    const allCorrect =
+                        Array.isArray(s) &&
+                        s.length === q.correct.length &&
+                        s.every((i) => q.correct.includes(i));
+                    return acc + (allCorrect ? 1 : 0);
+                } else {
+                    return acc + (s === q.correct ? 1 : 0);
+                }
+            }, 0);
+            setScore(newScore);
+        }
+    }, [quizValidated, quiz, selectedAnswers]);
 
     const toggleSelect = (qIndex, cIndex, isMultiple) => {
         setSelectedAnswers((prev) => {
@@ -222,16 +230,25 @@ export default function QuizDisplay({ quiz, quizValidated, setQuizValidated }) {
                                 }
                             }, 0);
 
-                            const payload = {
+                            const enrichedPayload = {
+                                id: crypto.randomUUID(),
                                 questions: computed,
                                 score,
                                 total: computed.length,
                                 validatedAt,
                             };
 
-                            localStorage.setItem(`quiz_validated_${id}`, JSON.stringify(payload));
+                            let existing;
+                            try {
+                                const raw = localStorage.getItem(`quiz_validated_${id}`);
+                                existing = Array.isArray(JSON.parse(raw)) ? JSON.parse(raw) : [];
+                            } catch {
+                                existing = [];
+                            }
 
-                            setQuizValidated(true);
+                            localStorage.setItem(`quiz_validated_${id}`, JSON.stringify([...existing, enrichedPayload]));
+
+                            setQuizValidated?.(true);
                         }}
                     >
                         Valider mes réponses

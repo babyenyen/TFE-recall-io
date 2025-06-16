@@ -5,11 +5,24 @@ import { usePageTitle } from "@/components/PageTitleContext";
 import {
     Trash2
 } from "lucide-react";
+import {
+    AlertDialog,
+    AlertDialogTrigger,
+    AlertDialogContent,
+    AlertDialogHeader,
+    AlertDialogTitle,
+    AlertDialogDescription,
+    AlertDialogFooter,
+    AlertDialogCancel,
+    AlertDialogAction,
+} from "@/components/ui/alert-dialog";
 
 export default function AllFlash() {
     const [packs, setPacks] = useState([]);
     const navigate = useNavigate();
     const [items] = useItems(); // pour récupérer les noms des fichiers
+    const [openDialog, setOpenDialog] = useState(false);
+    const [selectedPackId, setSelectedPackId] = useState(null);
 
     //IA-1-CODE : Explication de la logique pour retrouver l'id des fichier expliqué par ChatGPT (OpenAI)
     useEffect(() => {
@@ -93,11 +106,12 @@ export default function AllFlash() {
                                     <p className="text-sm text-slate-500">{pack.count} cartes • {pack.createdAt && ` créé le ${formatDate(pack.createdAt)}`}
                                     </p>
                                 </div>
-                                <div className="flex flex-col-reverse md:flex-row gap-2 md:items-center items-end">
+                                <div className="flex flex-col md:flex-row gap-2 md:items-center items-end">
                                     <button
                                         onClick={(e) => {
                                             e.stopPropagation(); // évite que le click ouvre la page
-                                            handleDeletePack(pack.id);
+                                            setSelectedPackId(pack.id);
+                                            setOpenDialog(true);
                                         }}
                                         className="flex justify-center items-center rounded-md p-1 sm:p-2 bg-red-100 hover:bg-red-200 text-red-600 transition-all"
                                         title="Supprimer ce pack"
@@ -111,6 +125,31 @@ export default function AllFlash() {
                     </ul>
                 </div>
             )}
+            <AlertDialog open={openDialog} onOpenChange={setOpenDialog}>
+                <AlertDialogContent>
+                    <AlertDialogHeader>
+                        <AlertDialogTitle>Supprimer ce pack de flashcards ?</AlertDialogTitle>
+                        <AlertDialogDescription>
+                            Cette action est irréversible. Le pack de flashcards sera supprimé définitivement.
+                        </AlertDialogDescription>
+                    </AlertDialogHeader>
+                    <AlertDialogFooter>
+                        <AlertDialogCancel>Annuler</AlertDialogCancel>
+                        <AlertDialogAction
+                            className="bg-red-500 hover:bg-red-700"
+                            onClick={() => {
+                                if (selectedPackId) {
+                                    handleDeletePack(selectedPackId);
+                                    setSelectedPackId(null);
+                                    setOpenDialog(false);
+                                }
+                            }}
+                        >
+                            Supprimer
+                        </AlertDialogAction>
+                    </AlertDialogFooter>
+                </AlertDialogContent>
+            </AlertDialog>
         </div>
     );
 }

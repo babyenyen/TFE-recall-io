@@ -109,7 +109,7 @@ export default function Trash() {
                 <ul className="space-y-2">
                     {trashedItems.length === 0 ? (
                         <li className="border border-dotted border-violet-400 bg-slate-100 rounded-lg">
-                            <div className="flex justify-between text-slate-400 pt-6">
+                            <div className="flex justify-between text-slate-400 py-6">
                                 <img
                                     src={noTrash}
                                     alt="Nouveau fichier"

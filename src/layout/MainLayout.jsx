@@ -3,6 +3,10 @@ import { Outlet } from "react-router-dom";
 import Sidebar from "../components/Sidebar";
 import { PageTitleProvider, usePageTitle } from "@/components/PageTitleContext";
 import LogoIcon from "@/components/common/LogoIcon";
+import {
+    Menu,
+    X
+} from "lucide-react";
 
 export default function MainLayout() {
     return (
@@ -73,15 +77,22 @@ function MainLayoutContent() {
 
             <div className={`flex-1 flex flex-col min-w-0 transition-all duration-300 ${mainContentPaddingClass} overflow-x-hidden overflow-y-auto`}>
                 <header className="fixed top-0 left-0 right-0 z-30 bg-slate-100 shadow-sm md:hidden p-4 flex items-center">
-                        <button
-                            onClick={toggleSidebar}
-                            className="p-1 rounded-md bg-transparent focus:outline-none"
-                        >
-                            <LogoIcon className="w-8 h-8 fill-violet-600 transition-all duration-300" />
-                        </button>
-                    <h1 className="text-xl ml-4 text-slate-800 truncate max-w-[300px] overflow-hidden whitespace-nowrap">
-                        {pageTitle}
-                    </h1>
+                    <button
+                        onClick={toggleSidebar}
+                        className="p-1 rounded-md bg-transparent focus:outline-none"
+                    >
+                        {!isDesktopView && !isSidebarOpen && (
+                            <Menu className="w-7 h-7  transition-all duration-300" />
+                        ) || (
+                            <Menu className="w-7 h-7 rotate-90 transition-all duration-300" />
+                        )}
+                    </button>
+                    <div className="flex items-center ml-3">
+                        <LogoIcon className="inline-block w-6 h-6 mr-2 fill-violet-600" />
+                        <h1 className="text-xl text-slate-800 truncate max-w-[300px] overflow-hidden whitespace-nowrap align-middle">
+                            {pageTitle}
+                        </h1>
+                    </div>
                 </header>
 
                 <main className="flex-1 pt-16 md:pt-8 min-w-0">

@@ -18,7 +18,7 @@ const links = [
     { to: "/app/favorites", label: "Favoris", icon: <Star className="w-5 h-5" /> },
     { to: "/app/notes", label: "Toutes les notes", icon: <StickyNote className="w-5 h-5" /> },
     { to: "/app/all-flash", label: "Toutes les flashcards", icon: <Zap className="w-5 h-5" /> },
-    { to: "/app/all-quiz", label: "Tous les quiz", icon: <ListTodo className="w-5 h-5" /> },
+    { to: "/app/all-quiz", label: "Toutes des corrections", icon: <ListTodo className="w-5 h-5" /> },
     { to: "/app/trash", label: "Corbeille", icon: <Trash2 className="w-5 h-5" /> },
 ];
 
@@ -34,12 +34,11 @@ export default function Sidebar({ isSidebarOpen, isDesktopView, isDesktopSidebar
     // Détermine les classes de largeur et de positionnement de la sidebar
     const sidebarClasses = isDesktopView
         ? // Styles pour le mode desktop (pousse le contenu)
-        `${isDesktopSidebarCollapsed ? "w-16" : "w-60"} sticky top-0 h-screen transition-all duration-300`
+        `${isDesktopSidebarCollapsed ? "w-16" : "w-64"} sticky top-0 h-screen transition-all duration-300`
         : // Styles pour le mode mobile (superposition)
-        `fixed inset-y-0 left-0 h-screen w-60 z-50 transform transition-transform duration-300 ${isSidebarOpen ? "translate-x-0" : "-translate-x-full"
+        `fixed inset-y-0 left-0 h-screen w-64 z-50 transform transition-transform duration-300 ${isSidebarOpen ? "translate-x-0" : "-translate-x-full"
         }`;
 
-    // --- MISE À JOUR ICI ---
     // Cette fonction gère le comportement du clic sur le logo/icône
     const handleLogoClick = () => {
         if (isDesktopView) {
@@ -109,7 +108,7 @@ export default function Sidebar({ isSidebarOpen, isDesktopView, isDesktopSidebar
                 <div
                     onClick={handleLogout}
                     role="button"
-                    className={`cursor-pointer hover:text-violet-600 flex items-center px-3 py-2 rounded font-medium transition text-slate-400 ${isDesktopSidebarCollapsed && isDesktopView ? "justify-center" : ""
+                    className={`cursor-pointer hover:text-violet-600 flex justify-center items-center px-3 py-2 rounded font-medium transition text-slate-400 ${isDesktopSidebarCollapsed && isDesktopView ? "justify-center" : ""
                         } ${!isDesktopView ? "w-full" : "" // Prendre toute la largeur en mobile
                         }`}
                 >

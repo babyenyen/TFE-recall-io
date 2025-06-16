@@ -3,35 +3,54 @@ import { useNavigate } from "react-router-dom";
 import useItems from "@/hooks/useItems";
 import { usePageTitle } from "@/components/PageTitleContext";
 import { Trash2 } from "lucide-react";
+import {
+    AlertDialog,
+    AlertDialogTrigger,
+    AlertDialogContent,
+    AlertDialogHeader,
+    AlertDialogTitle,
+    AlertDialogDescription,
+    AlertDialogFooter,
+    AlertDialogCancel,
+    AlertDialogAction,
+} from "@/components/ui/alert-dialog";
 
 export default function AllQuiz() {
     const [quizzes, setQuizzes] = useState([]);
     const navigate = useNavigate();
     const [items] = useItems();
     const { setPageTitle } = usePageTitle();
+    const [openDialog, setOpenDialog] = useState(false);
+    const [selectedPackId, setSelectedPackId] = useState(null);
 
     useEffect(() => {
-        setPageTitle("Tous les quiz corrigés");
+        setPageTitle("Toutes les corrections");
         const keys = Object.keys(localStorage);
         const quizKeys = keys.filter(key => key.startsWith("quiz_validated_"));
 
-        const loaded = quizKeys.map(key => {
+        let loaded = [];
+
+        quizKeys.forEach(key => {
             const fileId = key.replace("quiz_validated_", "");
             const raw = localStorage.getItem(key);
             try {
                 const parsed = JSON.parse(raw);
-                const file = items.find(i => i.id === fileId);
-                return {
-                    id: fileId,
-                    name: file ? file.name : "Fichier inconnu",
-                    score: parsed.score,
-                    total: parsed.total,
-                    validatedAt: parsed.validatedAt,
-                };
-            } catch {
-                return null;
+                if (Array.isArray(parsed)) {
+                    const file = items.find(i => i.id === fileId);
+                    parsed.forEach(entry => {
+                        loaded.push({
+                            ...entry,
+                            fileId,
+                            fileName: file ? file.name : "Fichier inconnu"
+                        });
+                    });
+                }
+            } catch (e) {
+                console.error("Erreur de parsing", key, e);
             }
-        }).filter(Boolean);
+        });
+
+        setQuizzes(loaded);
 
         setQuizzes(loaded);
     }, [items, setPageTitle]);
@@ -47,14 +66,30 @@ export default function AllQuiz() {
         });
     };
 
-    const deleteQuiz = (id) => {
-        localStorage.removeItem(`quiz_validated_${id}`);
-        setQuizzes(prev => prev.filter(q => q.id !== id));
+    const deleteQuiz = (packId) => {
+        // Trouver le bon fichier dans lequel se trouve ce pack
+        const matchingKey = Object.keys(localStorage).find(key => {
+            const data = JSON.parse(localStorage.getItem(key));
+            return Array.isArray(data) && data.find(q => q.id === packId);
+        });
+
+        if (!matchingKey) return;
+
+        const list = JSON.parse(localStorage.getItem(matchingKey));
+        const updated = list.filter(q => q.id !== packId);
+
+        if (updated.length === 0) {
+            localStorage.removeItem(matchingKey);
+        } else {
+            localStorage.setItem(matchingKey, JSON.stringify(updated));
+        }
+
+        setQuizzes(prev => prev.filter(q => q.id !== packId));
     };
 
     return (
         <div className="p-4">
-            <h1 className="md:block hidden">Tous les quiz corrigés</h1>
+            <h1 className="md:block hidden">Toutes les corrections</h1>
             {quizzes.length === 0 ? (
                 <p className="text-slate-500">Aucune correction de quiz. Lance un quiz depuis une de tes notes.</p>
             ) : (
@@ -62,12 +97,12 @@ export default function AllQuiz() {
                     <ul className="space-y-2">
                         {quizzes.map((q) => (
                             <li
-                                key={q.id}
-                                onClick={() => navigate(`/app/quiz-validated/${q.id}`)}
+                                key={q.id + q.validatedAt}
+                                onClick={() => navigate(`/app/quiz-validated/${q.fileId}?q=${q.id}`)}
                                 className="flex justify-between md:items-center cursor-pointer py-2 px-3 border rounded-md bg-white hover:bg-slate-50 transition"
                             >
                                 <div>
-                                    <p className="font-medium truncate max-w-[170px] overflow-hidden whitespace-nowrap">{q.name}</p>
+                                    <p className="font-medium truncate max-w-[170px] overflow-hidden whitespace-nowrap">{q.fileName}</p>
                                     <p className="text-sm text-slate-500">
                                         {q.score}/{q.total} correctes • corrigé le {formatDate(q.validatedAt)}
                                     </p>
@@ -76,7 +111,8 @@ export default function AllQuiz() {
                                     <button
                                         onClick={(e) => {
                                             e.stopPropagation();
-                                            deleteQuiz(q.id)
+                                            setSelectedPackId(q.id);
+                                            setOpenDialog(true);
                                         }}
                                         className="flex justify-center items-center rounded-md p-1 sm:p-2 bg-red-100 hover:bg-red-200 text-red-600 transition-all"
                                         title="Supprimer cette correction"
@@ -90,6 +126,32 @@ export default function AllQuiz() {
                     </ul>
                 </div>
             )}
+            <AlertDialog open={openDialog} onOpenChange={setOpenDialog}>
+                <AlertDialogContent>
+                    <AlertDialogHeader>
+                        <AlertDialogTitle>Supprimer cette correction de quiz ?</AlertDialogTitle>
+                        <AlertDialogDescription>
+                            Cette action est irréversible. La correction du quiz sera supprimée définitivement.
+                        </AlertDialogDescription>
+                    </AlertDialogHeader>
+                    <AlertDialogFooter>
+                        <AlertDialogCancel>Annuler</AlertDialogCancel>
+                        <AlertDialogAction
+                            className="bg-red-500 hover:bg-red-700"
+                            onClick={() => {
+                                if (selectedPackId) {
+                                    deleteQuiz(selectedPackId);
+                                    setSelectedPackId(null);
+                                    setOpenDialog(false);
+                                }
+                            }}
+                        >
+                            Supprimer
+                        </AlertDialogAction>
+                    </AlertDialogFooter>
+                </AlertDialogContent>
+            </AlertDialog>
+
         </div>
     );
 }

@@ -188,8 +188,8 @@ export default function Flashcards() {
     return (
         <div className="p-4">
             <h1 className="md:block hidden truncate max-w-[750px] overflow-hidden whitespace-nowrap">Flashcards pour : {current.name}</h1>
-            <Breadcrumb items={items} />
-            <div className="max-w-2xl mx-auto relative">
+            {/* <Breadcrumb items={items} /> */}
+            <div className="max-w-2xl mx-auto relative pt-11">
                 <div className="flex justify-between items-center gap-2 border rounded-lg border-slate-300 bg-slate-50 p-1 mb-2 text-sm text-slate-500">
                     <div className="flex items-center gap-1">
                         <button
@@ -261,7 +261,7 @@ export default function Flashcards() {
                         </AlertDialog>
                     </div>
                 </div>
-                <div className="absolute top-14 [left:calc(50%-50px)]">
+                <div className="absolute top-14 [left:calc(50%-50px)] pt-11">
                     <p className="text-sm text-slate-500 mb-2 text-center w-[100px]">
                         Carte {currentIndex + 1} / {flashcards.length}
                     </p>
