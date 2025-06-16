@@ -58,6 +58,11 @@ function MainLayoutContent() {
         ? (isDesktopSidebarCollapsed ? "px-16" : "px-8")
         : "";
 
+    const setDesktopSidebarCollapsed = (value) => {
+        setIsDesktopSidebarCollapsed(value);
+        localStorage.setItem("recall-sidebar-collapsed", JSON.stringify(value));
+    };
+
     return (
         <div className="flex h-screen w-screen overflow-hidden">
             <Sidebar
@@ -66,6 +71,7 @@ function MainLayoutContent() {
                 isDesktopSidebarCollapsed={isDesktopSidebarCollapsed}
                 toggleSidebar={toggleSidebar}
                 toggleDesktopSidebarCollapse={toggleDesktopSidebarCollapse}
+                setDesktopSidebarCollapsed={setDesktopSidebarCollapsed}
             />
 
             {!isDesktopView && isSidebarOpen && (

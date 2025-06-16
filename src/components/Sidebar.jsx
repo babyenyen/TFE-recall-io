@@ -31,12 +31,23 @@ export default function Sidebar({ isSidebarOpen, isDesktopView, isDesktopSidebar
         navigate("/"); // pas de /app vers on va a la landing page
     };
 
-    // Détermine les classes de largeur et de positionnement de la sidebar
+    const handleMouseEnter = () => {
+        if (isDesktopView && isDesktopSidebarCollapsed) {
+            toggleDesktopSidebarCollapse();
+        }
+    };
+
+    const handleMouseLeave = () => {
+        if (isDesktopView && !isDesktopSidebarCollapsed) {
+            toggleDesktopSidebarCollapse(); // set collapsed à true
+        }
+    };
+
+    const expanded = isDesktopView && !isDesktopSidebarCollapsed;
+
     const sidebarClasses = isDesktopView
-        ? // Styles pour le mode desktop (pousse le contenu)
-        `${isDesktopSidebarCollapsed ? "w-16" : "w-64"} sticky top-0 h-screen transition-all duration-300`
-        : // Styles pour le mode mobile (superposition)
-        `fixed inset-y-0 left-0 h-screen w-64 z-50 transform transition-transform duration-300 ${isSidebarOpen ? "translate-x-0" : "-translate-x-full"
+        ? `${expanded ? "w-64" : "w-16"} sticky top-0 h-screen transition-all duration-300`
+        : `fixed inset-y-0 left-0 h-screen w-64 z-50 transform transition-transform duration-300 ${isSidebarOpen ? "translate-x-0" : "-translate-x-full"
         }`;
 
     // Cette fonction gère le comportement du clic sur le logo/icône
@@ -49,14 +60,17 @@ export default function Sidebar({ isSidebarOpen, isDesktopView, isDesktopSidebar
             }
         }
     };
-    // ----------------------
 
     return (
-        <aside className={`${sidebarClasses} bg-slate-200 flex flex-col justify-between`}>
+        <aside
+            onMouseEnter={handleMouseEnter}
+            onMouseLeave={handleMouseLeave}
+            className={`${sidebarClasses} bg-slate-200 flex flex-col justify-between`}
+        >
             <div className="py-4 flex flex-col items-center">
                 <div
                     className={`mb-6 flex items-center h-10 transition-all ${isDesktopSidebarCollapsed && isDesktopView ? "justify-center w-10 h-10 transition-all" : ""}`}
-                    onClick={handleLogoClick} // Appelle la fonction `handleLogoClick` unifiée
+                    onClick={() => navigate("/app/dashboard")}
                     role="button"
                     tabIndex={0} // Rend focusable pour l'accessibilité
                     onKeyDown={(e) => e.key === "Enter" && handleLogoClick()} // Gère l'événement clavier
@@ -90,11 +104,11 @@ export default function Sidebar({ isSidebarOpen, isDesktopView, isDesktopSidebar
                                 {icon}
                             </div>
                             {/* Le texte du lien est masqué si la sidebar est réduite sur desktop, ou si c'est mobile */}
-                            {(!isDesktopSidebarCollapsed || !isDesktopView) && (
+                            {(isDesktopView ? expanded : true) && (
                                 <span
-                                    className={`ml-3 whitespace-nowrap transition-all duration-300 ease-in-out transform ${isDesktopSidebarCollapsed && isDesktopView // Si desktop et réduit
-                                        ? "opacity-0 translate-x-[-8px] pointer-events-none"
-                                        : "opacity-100 translate-x-0"
+                                    className={`ml-3 whitespace-nowrap transition-all duration-300 ease-in-out transform ${isDesktopView && isDesktopSidebarCollapsed
+                                            ? "opacity-0 -translate-x-2 pointer-events-none"
+                                            : "opacity-100 translate-x-0"
                                         }`}
                                 >
                                     {label}
@@ -116,10 +130,10 @@ export default function Sidebar({ isSidebarOpen, isDesktopView, isDesktopSidebar
                         <LogOut className="w-5 h-5" />
                     </div>
 
-                    {(!isDesktopSidebarCollapsed || !isDesktopView) && (
-                        <span className={`ml-3 whitespace-nowrap transition-all duration-300 ease-in-out transform ${isDesktopSidebarCollapsed && isDesktopView
-                            ? "opacity-0 translate-x-[-8px] pointer-events-none"
-                            : "opacity-100 translate-x-0"
+                    {expanded && (
+                        <span className={`ml-3 whitespace-nowrap transition-all duration-300 ease-in-out transform ${expanded
+                            ? "opacity-100 translate-x-0"
+                            : "opacity-0 -translate-x-2 pointer-events-none"
                             }`}>
                             Se déconnecter
                         </span>

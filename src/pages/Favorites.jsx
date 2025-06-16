@@ -48,6 +48,19 @@ export default function Favorites() {
     const { setPageTitle } = usePageTitle();
     useEffect(() => { setPageTitle('Favoris'); }, [setPageTitle]);
 
+    const formatDate = (isoDate) => {
+        const date = new Date(isoDate);
+        return isNaN(date.getTime())
+            ? "—"
+            : date.toLocaleString("fr-FR", {
+                year: "numeric",
+                month: "short",
+                day: "numeric",
+                hour: "2-digit",
+                minute: "2-digit",
+            });
+    };
+
     return (
         <div className="p-4">
             <h1 className="md:block hidden">Favoris</h1>
@@ -121,6 +134,7 @@ export default function Favorites() {
                                         <Pencil size={14} className="group-hover:text-slate-500" />
                                     </button>
                                 </div>
+                                <p className="text-xs text-slate-400">Modifié le {formatDate(item.updatedAt || item.createdAt || Date.now())}</p>
                             </CardHeader>
                         </Card>
                     ))
