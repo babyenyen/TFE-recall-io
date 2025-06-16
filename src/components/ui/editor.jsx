@@ -27,7 +27,7 @@ export default function Editor({ content, onChange, setLoadingQuiz, editable = t
         editorProps: {
             attributes: {
                 class:
-                    "prose prose-sm max-w-none h-[570px] md:h-[600px] overflow-auto p-4 border border-slate-300 rounded-lg bg-white focus:outline-none focus:ring-2 focus:ring-primary text-sm",
+                    "prose prose-base max-w-none h-[570px] md:h-[600px] overflow-auto p-4 border border-slate-300 rounded-lg bg-white focus:outline-none focus:ring-2 focus:ring-primary text-base",
             },
         },
     });
