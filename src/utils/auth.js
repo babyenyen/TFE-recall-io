@@ -1,4 +1,4 @@
-// IA-1-CODE: Explication de ce js par ChatGPT (OpenAI)
+// IA-1-CODE: Explication et correction syntaxe de ce js par ChatGPT (OpenAI)
 const users = [
     {
         id: 1,

@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import { useState } from "react";
 import { Button } from "@/components/ui/button";
 import { useParams, useNavigate } from "react-router-dom";
 import {
@@ -9,37 +9,16 @@ import {
 import Checkbox from "@/components/ui/checkbox";
 import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
 
-export default function QuizDisplay({ quiz, quizValidated, setQuizValidated }) {
-    const [selectedAnswers, setSelectedAnswers] = useState({});
+// IA-1-CODE: Explication et correction de la logique par ChatGPT (OpenAI)
+export default function QuizDisplay({ quiz, quizValidated, setQuizValidated, score: initialScore, initialSelectedAnswers }) {
+    const [selectedAnswers, setSelectedAnswers] = useState(initialSelectedAnswers ?? {});
     const navigate = useNavigate();
     const { id } = useParams();
 
-    const [score, setScore] = useState(0);
+    const [score, setScore] = useState(initialScore ?? 0);
     const total = quiz.length;
 
-    useEffect(() => {
-        if (quizValidated) {
-            const computed = quiz.map((q, index) => ({
-                ...q,
-                selected: selectedAnswers[index] ?? (Array.isArray(q.correct) ? [] : null),
-            }));
-
-            const newScore = computed.reduce((acc, q) => {
-                const s = q.selected;
-                if (Array.isArray(q.correct)) {
-                    const allCorrect =
-                        Array.isArray(s) &&
-                        s.length === q.correct.length &&
-                        s.every((i) => q.correct.includes(i));
-                    return acc + (allCorrect ? 1 : 0);
-                } else {
-                    return acc + (s === q.correct ? 1 : 0);
-                }
-            }, 0);
-            setScore(newScore);
-        }
-    }, [quizValidated, quiz, selectedAnswers]);
-
+    //espace pour gerer l'interaction (selection des réponses) et mise à jour de selectedAnswers
     const toggleSelect = (qIndex, cIndex, isMultiple) => {
         setSelectedAnswers((prev) => {
             const current = prev[qIndex] || (isMultiple ? [] : null);
@@ -56,12 +35,14 @@ export default function QuizDisplay({ quiz, quizValidated, setQuizValidated }) {
         });
     };
 
+    //validation des reps QCM : renvoie true ou false pour affichage visuel
     const isCorrectQCM = (q, selected) => selected === q.correct;
 
+    //validation des reps QRM : renvoie true ou false pour affichage visuel
     const isCorrectQRM = (q, selected) =>
         Array.isArray(selected) &&
-        selected.length === q.correct.length &&
-        selected.every((i) => q.correct.includes(i));
+        selected.length === q.correct.length && //nbre reponses selected = nbre reponses correctes
+        selected.every((i) => q.correct.includes(i)); //toutes reponses selected sont correctes
 
     const getVisualFeedback = (qIndex, choiceIndex) => {
         const q = quiz[qIndex];
@@ -96,7 +77,7 @@ export default function QuizDisplay({ quiz, quizValidated, setQuizValidated }) {
         return { borderColor, bgColor, icon };
     };
 
-    // IA-1-CODE: Explication de la logique de feedback visuel par ChatGPT (OpenAI)
+    // IA-1-CODE: Correction des conditions pour render par ChatGPT (OpenAI)
     return (
         <div className="mt-4">
             <div className="space-y-6">
@@ -248,6 +229,7 @@ export default function QuizDisplay({ quiz, quizValidated, setQuizValidated }) {
 
                             localStorage.setItem(`quiz_validated_${id}`, JSON.stringify([...existing, enrichedPayload]));
 
+                            setScore(score);
                             setQuizValidated?.(true);
                         }}
                     >

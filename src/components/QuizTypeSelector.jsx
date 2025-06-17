@@ -1,6 +1,6 @@
 import Checkbox from "@/components/ui/checkbox";
 
-// IA-1-CODE: Explication de la logique de la fonction QuizTypeSelector par ChatGPT (OpenAI)
+// IA-1-CODE: Explication de la logique de la fonction QuizTypeSelector et suggestion de faire un selector par ChatGPT (OpenAI)
 export default function QuizTypeSelector({ quizType, setQuizType }) {
     const toggleType = (type) => {
         setQuizType((prev) => ({

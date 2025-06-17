@@ -15,6 +15,7 @@ import {
     AlertDialogAction,
 } from "@/components/ui/alert-dialog";
 
+//IA-1-CODE: Suggestion de la fonction de comptage des enfants supprimés par ChatGPT (OpenAI)
 function countDeletedChildrenRecursively(id, items) {
     let folderCount = 0;
     let fileCount = 0;
@@ -37,6 +38,7 @@ function countDeletedChildrenRecursively(id, items) {
     return { folderCount, fileCount };
 }
 
+// IA-1-CODE: Correction de synthaxe par ChatGPT (OpenAI)
 export default function TrashFolder() {
     const { id } = useParams();
     const navigate = useNavigate();

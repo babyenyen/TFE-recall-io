@@ -1,7 +1,6 @@
 import { useParams, useNavigate } from "react-router-dom";
 import { useEffect, useRef, useState, useCallback } from "react"; // Added useCallback
 import useItems from "@/hooks/useItems";
-import Breadcrumb from "@/components/ui/breadcrumb";
 import { Button } from "@/components/ui/button";
 import { generateFlashcardsFromGemini } from "@/api/api";
 import Flashcard from "@/components/Flashcard";
@@ -34,13 +33,8 @@ import { usePageTitle } from "@/components/PageTitleContext"; // Correct path as
 //IA-1-CODE: Explication du code par ChatGPT (OpenAI)
 export default function Flashcards() {
     const { id } = useParams();
-    // on recupere l'ensemble des items
     const [items] = useItems();
     const navigate = useNavigate();
-    // on cherche l'item correspondant à l'ID dans la liste des items
-    const current = items.find((item) => item.id === id);
-    // contexte pour le titre de la page
-    const { setPageTitle } = usePageTitle();
 
     // State pour gérer les flashcards
     const [flashcards, setFlashcards] = useState([]);
@@ -49,6 +43,14 @@ export default function Flashcards() {
     const [revealed, setRevealed] = useState(false);
     const [loadingFlashcards, setLoadingFlashcards] = useState(false);
 
+    // on cherche l'item correspondant à l'ID dans la liste des items
+    const current = items.find((item) => item.id === id);
+    // contexte pour le titre de la page
+    const { setPageTitle } = usePageTitle();
+
+    const chunkIndexRef = useRef(0);
+    //on utilise useRef pour stocker les chunks de texte
+    const chunksRef = useRef([]);
 
     useEffect(() => {
         if (current) {
@@ -58,39 +60,7 @@ export default function Flashcards() {
         }
     }, [setPageTitle, current]); // on met à jour le titre de la page si l'item change
 
-    const generateNewBundle = async () => {
-        if (!current?.content) return;
-
-        const chunks = chunkText(current.content, 1500);
-
-        // Vérifie s’il reste des chunks à traiter
-        if (chunkIndexRef.current < chunks.length) {
-            const chunkToUse = chunks[chunkIndexRef.current];
-            chunkIndexRef.current += 1;
-
-            await fetchFlashcardsFromChunk(chunkToUse, true); // append = true
-        } else {
-            //empty pour pas laisser de console.error ;)
-            //tous les chunks ont été traités
-            return [];
-        }
-    };
-
-    useEffect(() => {
-        const saved = localStorage.getItem(`flashcards_${id}`);
-        if (saved) {
-            const parsed = JSON.parse(saved);
-            if (parsed?.cards) {
-                setFlashcards(parsed.cards);
-            }
-        } else {
-            generateNewBundle();
-        }
-    }, [id]);
-
-    // on garde en mémoire l'index du prochain chunk à envoyer à api.js car le premier (chunks[0]) est d'office envoyé
-    const chunkIndexRef = useRef(0);
-
+    // IA-1-CODE: Dépendance et callback expliqué par ChatGPT (OpenAI)
     const fetchFlashcardsFromChunk = useCallback(async (chunk, append = true) => {
         setLoadingFlashcards(true);
         try {
@@ -102,50 +72,66 @@ export default function Flashcards() {
                 }));
 
                 setFlashcards(prev => {
-                    const updated = append
-                        ? [...prev, ...flashcardsWithChunk]
-                        : flashcardsWithChunk;
+                    const updated = append ? [...prev, ...flashcardsWithChunk] : flashcardsWithChunk;
 
-                    // on sauvegarde les flashcards dans le localStorage avec la date
                     localStorage.setItem(`flashcards_${id}`, JSON.stringify({
                         createdAt: new Date().toISOString(),
                         cards: updated
                     }));
 
-                    if (!append) {
-                        setCurrentIndex(0);
-                    }
-
+                    if (!append) setCurrentIndex(0);
                     return updated;
                 });
-            } else {
-                if (!append && flashcards.length === 0) {
-                    setFlashcards([]);
-                    localStorage.removeItem(`flashcards_${id}`);
-                }
+            } else if (!append && flashcards.length === 0) {
+                setFlashcards([]);
+                localStorage.removeItem(`flashcards_${id}`);
             }
         } catch {
-            //empty pour pas laisser de console.error ;)
             return [];
         } finally {
             setLoadingFlashcards(false);
         }
-    }, [id, flashcards.length, setCurrentIndex]);
+    }, [id, flashcards.length]);
+
+    //on utilise useCallback pour éviter de recréer la fonction à chaque rendu
+    // les chunks sont stockés dans la propriété .current de chunksRef
+    const generateNewBundle = useCallback(async () => {
+        const chunks = chunksRef.current;
+        if (chunkIndexRef.current < chunks.length) {
+            const chunkToUse = chunks[chunkIndexRef.current];
+            chunkIndexRef.current += 1;
+            await fetchFlashcardsFromChunk(chunkToUse, true);
+        }
+    }, [fetchFlashcardsFromChunk]);
 
     useEffect(() => {
         if (!current?.content) {
-            setFlashcards([]); // on reset les flashcards si le contenu est vide
+            setFlashcards([]);
             return;
         }
+        const chunks = chunkText(current.content);
+        chunksRef.current = chunks;
 
-        // on divise le contenu en chunks
-        const chunks = chunkText(current.content, 1500);
         if (chunks.length > 0) {
-            chunkIndexRef.current = 1; // on commence à 1 car on va déjà charger le premier chunk
+            chunkIndexRef.current = 1;
         } else {
             setFlashcards([]);
         }
-    }, [current, fetchFlashcardsFromChunk]); // on refait la requête si le contenu change
+    }, [current]);
+
+    //on check si on a déjà des flashcards sauvegardées dans le localStorage et on charge le json
+    // sinon on lance generateNewBundle
+    useEffect(() => {
+        const saved = localStorage.getItem(`flashcards_${id}`);
+        if (saved) {
+            const parsed = JSON.parse(saved);
+            if (parsed?.cards) {
+                setFlashcards(parsed.cards);
+            }
+        } else {
+            generateNewBundle();
+        }
+    }, [id, generateNewBundle]);
 
     // handleNext pour passer à la carte suivante
     const handleNext = () => {

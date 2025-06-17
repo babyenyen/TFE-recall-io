@@ -5,6 +5,7 @@ import QuizDisplay from "@/components/QuizDisplay";
 import useItems from "@/hooks/useItems";
 import { usePageTitle } from "@/components/PageTitleContext";
 
+//IA-1-CODE: Correction par ChatGPT (OpenAI)
 export default function QuizValidated() {
     const { id } = useParams();
     const [searchParams] = useSearchParams();
@@ -40,12 +41,19 @@ export default function QuizValidated() {
 
     if (!data) return <p className="p-4">Quiz introuvable.</p>;
 
+    const selectedMap = {};
+    data.questions.forEach((q, index) => {
+        selectedMap[index] = q.selected;
+    });
+
     return (
         <div className="p-4">
             <h1 className="md:block hidden truncate max-w-[750px] overflow-hidden whitespace-nowrap">(Quiz corrigé) {current?.name}</h1>
             <QuizDisplay
                 quiz={data.questions}
                 quizValidated={true}
+                score={data.score}
+                initialSelectedAnswers={selectedMap}
             />
         </div>
     );

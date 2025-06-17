@@ -2,12 +2,12 @@ import { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
 import QuizDisplay from "@/components/QuizDisplay";
 import useItems from "@/hooks/useItems";
-import Breadcrumb from "@/components/ui/breadcrumb";
 import { Button } from "@/components/ui/button";
 import { Undo2 } from "lucide-react";
 import { useNavigate } from "react-router-dom";
 import { usePageTitle } from "@/components/PageTitleContext";
 
+// IA-1-CODE: Correction et explication de la logique du quiz par ChatGPT (OpenAI)
 export default function Quiz() {
     // On récupère l'ID du quiz depuis les paramètres de l'URL
     const { id } = useParams();
@@ -18,39 +18,41 @@ export default function Quiz() {
     const navigate = useNavigate();
 
     // On initialise les états pour le quiz
-    const [quizStarted, setQuizStarted] = useState(false);
-    const [quizValidated, setQuizValidated] = useState(false);
-    const [quiz, setQuiz] = useState([]);
-    // Options du quiz (durée, type de questions)
-    const [options, setOptions] = useState({ duration: 30, qcm: true, qrm: false });
-    const [timer, setTimer] = useState(0);
+    const [quizStarted, setQuizStarted] = useState(false); // n'a pas commencé
+    const [quizValidated, setQuizValidated] = useState(false); //n'est pas validé
+    const [quiz, setQuiz] = useState([]); //espace pour les questions avec vide par défaut
+    const [options, setOptions] = useState({ duration: 10, qcm: true, qrm: false }); //espace pour les options avec valeurs par défaut
+    const [timer, setTimer] = useState(0);// espace pr la quantité de secondes avec zero par défaut
 
-    // useEffect pour charger le quiz et les options depuis le localStorage
+    // useEffect pour charger le quiz et les options depuis le localStorage, via l'id via l'url
     useEffect(() => {
         const storedQuiz = JSON.parse(localStorage.getItem(`quiz-${id}`)) || [];
         const storedOptions = JSON.parse(localStorage.getItem(`quiz-options-${id}`)) || {};
 
         setQuiz(storedQuiz);
         setOptions(storedOptions);
-        setTimer(storedOptions.duration * 60); // en secondes
+        setTimer(storedOptions.duration * 60); //pour avoir en secondes
     }, [id]);
 
+    //lien entre validation quiz et timer
     useEffect(() => {
-        if (!quizStarted || quizValidated) return;
+        if (!quizStarted || quizValidated) return; //rien
 
+        // quand le timer atteint 0, on valide le quiz
         if (timer <= 0) {
             setQuizValidated(true);
             return;
         }
 
+        //lancement du minuteur
         const interval = setInterval(() => {
             setTimer((prev) => prev - 1);
         }, 1000);
 
-        return () => clearInterval(interval);
+        return () => clearInterval(interval); //nettoyage de l'intervalle
     }, [quizStarted, timer, quizValidated]);
 
-    // IA-1-CODE: Explication de la logique du minuteur par ChatGPT (OpenAI)
+    // IA-1-CODE: Correction et explication de la logique du minuteur par ChatGPT (OpenAI)
     // Fonction pour formater le temps restant en minutes et secondes
     const formatTime = (s) => {
         const min = Math.floor(s / 60).toString().padStart(2, "0");

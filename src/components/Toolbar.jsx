@@ -34,7 +34,7 @@ export default function Toolbar({ editor, setLoadingQuiz }) {
     const [items ] = useItems();
     const [quizOpen, setQuizOpen] = useState(false);
     const [quizType, setQuizType] = useState({ qcm: true, qrm: false });
-    const [duration, setDuration] = useState(30);
+    const [duration, setDuration] = useState(10);
 
     const current = items.find((item) => item.id === id);
 
@@ -43,6 +43,7 @@ export default function Toolbar({ editor, setLoadingQuiz }) {
 
         setQuizOpen(false);
 
+        // IA-1-CODE: Correction de l'initialisation de la boucle de génération de quiz par ChatGPT (OpenAI)
         const totalTarget = 10;
         const delay = 0;
         const allQuestions = [];
@@ -52,7 +53,7 @@ export default function Toolbar({ editor, setLoadingQuiz }) {
         const userWantsQCM = quizType.qcm;
         const userWantsQRM = quizType.qrm;
 
-        const chunks = chunkText(current.content, 1000);
+        const chunks = chunkText(current.content);
         const chunkCount = chunks.length;
 
         let attempts = 0;
@@ -86,14 +87,15 @@ export default function Toolbar({ editor, setLoadingQuiz }) {
             } finally {
                 setLoadingQuiz(false);
             }
-
+            // on vérifie si on a atteint le nombre de questions souhaité sinon on continue les attempts
             attempts++;
             if (delay > 0) await new Promise((res) => setTimeout(res, delay));
         }
 
         // IA-1-CODE: Explication de l'usage du localStorage (avec mise en place pour migration) par ChatGPT (OpenAI)
-        // Stockage en localStorage
+        //on stock le tableau de qsts en localStorage
         localStorage.setItem(`quiz-${current.id}`, JSON.stringify(allQuestions));
+        //on stock les options du quiz
         localStorage.setItem(`quiz-options-${current.id}`, JSON.stringify({
             duration,
             qcm: quizType.qcm,

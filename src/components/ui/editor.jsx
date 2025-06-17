@@ -5,6 +5,7 @@ import Underline from "@tiptap/extension-underline";
 import Placeholder from "@tiptap/extension-placeholder";
 import Toolbar from "../Toolbar";
 
+//IA-1-CODE: Placeholder pour editor tiptap expliqué par ChatGPT (OpenAI)
 export default function Editor({ content, onChange, setLoadingQuiz, editable = true, showToolbar = true }) {
     const editor = useEditor({
         editable,

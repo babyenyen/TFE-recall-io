@@ -12,7 +12,7 @@ export default function WelcomePage() {
 
     const { setPageTitle } = usePageTitle();
     useEffect(() => {
-        // on met à jour le titre de la page dynamiquement
+        // on met à jour le titre de la page dynamiquement expliqué par ChatGPT (OpenAI)
         const dynamicTitle = `Bienvenue ${user?.username ?? "à toi"} !`;
         setPageTitle(dynamicTitle);
     }, [setPageTitle, user]); // on ajoute 'user' comme dépendance pour mettre à jour le titre si l'utilisateur change

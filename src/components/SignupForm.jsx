@@ -2,6 +2,7 @@ import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { register } from "../utils/auth";
 
+// IA-1-CODE: Correction synthaxe par ChatGPT (OpenAI)
 export default function SignupForm({ onToggle }) {
     const [username, setUsername] = useState("");
     const [email, setEmail] = useState("");

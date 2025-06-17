@@ -30,6 +30,7 @@ import { usePageTitle } from "@/components/PageTitleContext";
 import newFile from "../assets/newFile.png"
 import { deleteItemSmart } from "@/utils/items";
 
+//IA-1-CODE: correction et suggestions par ChatGPT (OpenAI)
 export default function Folder() {
     // On récupère l'ID du dossier courant depuis les paramètres de l'URL
     const { id: currentFolderId } = useParams();
@@ -188,6 +189,8 @@ export default function Folder() {
                             });
                             return (
                                 <Card
+                                    tabIndex={0}
+                                    onKeyDown={(e) => e.key === "Enter" && navigate(`/app/${item.type}/${item.id}`)}
                                     key={item.id}
                                     onClick={() => navigate(`/app/${item.type}/${item.id}`)}
                                     className={item.type === "folder" ? "border  bg-violet-50 cursor-pointer hover:bg-violet-100 transition" : "cursor-pointer hover:bg-slate-50 transition"}

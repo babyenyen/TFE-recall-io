@@ -4,6 +4,7 @@ import { useEffect, useState } from "react";
 import Editor from "@/components/ui/editor";
 import { usePageTitle } from "@/components/PageTitleContext";
 
+//IA-1-CODE: correction synthaxe par ChatGPT (OpenAI)
 export default function TrashFile() {
     const { id } = useParams();
     const [items, setItems] = useItems();

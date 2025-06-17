@@ -12,6 +12,7 @@ import { useEffect } from "react";
 import { usePageTitle } from "@/components/PageTitleContext";
 import { deleteItemSmart } from "@/utils/items";
 
+//IA-1-CODE: correction et suggestions par ChatGPT (OpenAI)
 export default function Favorites() {
     const [items, setItems] = useItems();
     const navigate = useNavigate();
@@ -48,6 +49,7 @@ export default function Favorites() {
     const { setPageTitle } = usePageTitle();
     useEffect(() => { setPageTitle('Favoris'); }, [setPageTitle]);
 
+    //IA-1-CODE: Correction de la fonction de formatage de date par ChatGPT (OpenAI)
     const formatDate = (isoDate) => {
         const date = new Date(isoDate);
         return isNaN(date.getTime())
@@ -80,6 +82,8 @@ export default function Favorites() {
                 ) : (
                     favorites.map((item) => (
                         <Card
+                            tabIndex={0}
+                            onKeyDown={(e) => e.key === "Enter" && navigate(`/app/${item.type}/${item.id}`)}
                             key={item.id}
                             onClick={() => navigate(`/app/${item.type}/${item.id}`)}
                             className={item.type === "folder"

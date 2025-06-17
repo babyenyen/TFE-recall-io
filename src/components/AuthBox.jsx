@@ -3,8 +3,8 @@ import LoginForm from "./LoginForm";
 import SignupForm from "./SignupForm";
 
 export default function AuthBox() {
-    const [isLogin, setIsLogin] = useState(true); //Par défaut, on affiche le LoginForm
-    const toggle = () => setIsLogin((prev) => !prev); //Trigger pour passe de LoginForm à SignupForm
+    const [isLogin, setIsLogin] = useState(true); //par défaut, on affiche le LoginForm
+    const toggle = () => setIsLogin((prev) => !prev); //Trigger
 
     return (
         <div className="w-full max-w-md mx-auto">

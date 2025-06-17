@@ -30,6 +30,7 @@ import newFile from "../assets/newFile.png"
 import { usePageTitle } from "@/components/PageTitleContext";
 import { deleteItemSmart } from "@/utils/items";
 
+//IA-1-CODE: Explication de la logique derrière Ajout, Favoris, Suppression et Renommage par ChatGPT (OpenAI)
 export default function Dashboard() {
     // Hook personnalisé pour gérer les éléments (dossiers et fichiers)
     const [items, setItems] = useItems();
@@ -101,10 +102,6 @@ export default function Dashboard() {
         setUser(current);
     }, []);
 
-    const rootVisibleItems = items.filter(
-        (item) => !item.deleted && !item.parentId
-    );
-
     const { setPageTitle } = usePageTitle();
 
     useEffect(() => {
@@ -113,6 +110,10 @@ export default function Dashboard() {
         setPageTitle(dynamicTitle);
     }, [setPageTitle, user]); // on ajoute 'user' comme dépendance pour mettre à jour le titre si l'utilisateur change
 
+    const rootVisibleItems = items.filter(
+        (item) => !item.deleted && !item.parentId
+    );
+// IA-1-CODE: correction syntaxe par ChatGPT (OpenAI)
     return (
         <div className="w-full h-full p-4">
             <h1 className="md:block hidden" >Bienvenue {user?.username ?? "à toi"} !</h1>
@@ -162,6 +163,8 @@ export default function Dashboard() {
                                 });
                             return (
                                 <Card
+                                    tabIndex={0}
+                                    onKeyDown={(e) => e.key === "Enter" && navigate(`/app/${item.type}/${item.id}`)}
                                     key={item.id}
                                     onClick={() => navigate(`/app/${item.type}/${item.id}`)}
                                     className={item.type === "folder" ? "border  bg-violet-50 cursor-pointer hover:bg-violet-100 transition" : "cursor-pointer hover:bg-slate-50 transition"}

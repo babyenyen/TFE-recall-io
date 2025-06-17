@@ -17,6 +17,7 @@ import {
     AlertDialogAction,
 } from "@/components/ui/alert-dialog";
 
+// IA-1-CODE : Correction et explication de la logique par ChatGPT (OpenAI)
 export default function AllFlash() {
     const [packs, setPacks] = useState([]);
     const navigate = useNavigate();
@@ -67,6 +68,7 @@ export default function AllFlash() {
         setPacks(foundPacks);
     }, [items]);
 
+    //IA-1-CODE: Correction de la fonction de formatage de date par ChatGPT (OpenAI)
     const formatDate = (iso) => {
         const date = new Date(iso);
         return date.toLocaleDateString("fr-FR", {
@@ -90,12 +92,14 @@ export default function AllFlash() {
         <div className="p-4">
             <h1 className="md:block hidden">Tous les packs de flashcards</h1>
             {packs.length === 0 ? (
-                <p className="text-slate-500">Il n’y a pas de flash ici. Tu peux en générer via ta page de notes.</p>
+                <p className="text-slate-500 pt-4">Il n’y a pas de flash ici. Tu peux en générer via ta page de notes.</p>
             ) : (
                 <div className="mt-6">
                     <ul className="space-y-2">
                         {packs.map((pack) => (
                             <li
+                                tabIndex={0}
+                                onKeyDown={(e) => e.key === "Enter" && navigate(`/app/flashcards/${pack.id}`)}
                                 key={pack.id}
                                 className="flex justify-between md:items-center cursor-pointer py-2 px-3 border rounded-md bg-white hover:bg-slate-50 transition"
                                 onClick={() => navigate(`/app/flashcards/${pack.id}`)}

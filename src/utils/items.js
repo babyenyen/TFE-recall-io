@@ -1,3 +1,4 @@
+//IA-1-CODE: Suppression et restauration d'items avec logique de cascade et intelligente suggérée par ChatGPT (OpenAI)
 // Suppression récursive : dossier + tous ses descendants
 export function deleteItemCascade(id, allItems) {
     const toDelete = new Set();

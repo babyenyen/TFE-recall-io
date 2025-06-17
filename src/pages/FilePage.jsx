@@ -9,6 +9,7 @@ import loaderAnimation from "@/assets/animations/loader.json";
 import RenameDialogTitle from "@/components/RenameDialogTitle";
 import { usePageTitle } from "@/components/PageTitleContext"; // Ensure correct path
 
+//IA-1-CODE: correction "modifié" des ancestres par ChatGPT (OpenAI)
 function updateAncestors(itemId, items, updatedAt) {
     const updatedItems = [...items];
     let current = items.find((i) => i.id === itemId);
@@ -27,6 +28,7 @@ function updateAncestors(itemId, items, updatedAt) {
     return updatedItems;
 }
 
+// IA-1-CODE: correction par ChatGPT (OpenAI)
 export default function FilePage() {
     const { id } = useParams();
     // on récupère les items depuis le hook useItems

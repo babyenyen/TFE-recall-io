@@ -54,6 +54,7 @@ export default function Notes() {
     const { setPageTitle } = usePageTitle();
     useEffect(() => { setPageTitle('Toutes les notes'); }, [setPageTitle]);
 
+    //IA-1-CODE: Correction de la fonction de formatage de date par ChatGPT (OpenAI)
     const formatDate = (isoDate) => {
         const date = new Date(isoDate);
         return isNaN(date.getTime())
@@ -86,6 +87,8 @@ export default function Notes() {
                 ) : (
                     notes.map((item) => (
                         <Card
+                            tabIndex={0}
+                            onKeyDown={(e) => e.key === "Enter" && navigate(`/app/file/${item.id}`)}
                             key={item.id}
                             onClick={() => navigate(`/app/file/${item.id}`)}
                             className="cursor-pointer hover:bg-slate-50 transition "

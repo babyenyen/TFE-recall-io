@@ -8,6 +8,7 @@ import {
     X
 } from "lucide-react";
 
+// IA-1-CODE: mise en place du layout principal de l'application corrigé par ChatGPT (OpenAI)
 export default function MainLayout() {
     return (
         // Envelopper tout le contenu du layout avec le PageTitleProvider

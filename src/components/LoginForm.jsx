@@ -8,6 +8,7 @@ export default function LoginForm({ onToggle }) {
     const [error, setError] = useState("");
     const navigate = useNavigate();
 
+    // IA-1-CODE: Correction synthaxe par ChatGPT (OpenAI)
     const handleSubmit = (e) => {
         e.preventDefault();
 

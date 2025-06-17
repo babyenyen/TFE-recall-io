@@ -33,6 +33,7 @@ export async function generateFlashcardsFromGemini(text) {
 
     const data = await response.json();
 
+    //IA-1-CODE: Protection contre les réponses vides ou mal formées par ChatGPT (OpenAI)
     const generatedText = data.candidates?.[0]?.content?.parts?.[0]?.text || "";
 
     // Parse le JSON renvoyé par Gemini
@@ -89,6 +90,7 @@ Génère 1 question ${typePhrase} au format JSON.
 
     const data = await response.json();
 
+    //IA-1-CODE: Protection contre les réponses vides ou mal formées par ChatGPT (OpenAI)
     const textResponse = data.candidates?.[0]?.content?.parts?.[0]?.text || "";
 
     // Protection : si réponse vide ou partielle

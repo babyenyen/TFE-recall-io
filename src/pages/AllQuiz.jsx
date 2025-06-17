@@ -15,6 +15,7 @@ import {
     AlertDialogAction,
 } from "@/components/ui/alert-dialog";
 
+// IA-1-CODE : Correction et explication de la logique par ChatGPT (OpenAI)
 export default function AllQuiz() {
     const [quizzes, setQuizzes] = useState([]);
     const navigate = useNavigate();
@@ -45,16 +46,16 @@ export default function AllQuiz() {
                         });
                     });
                 }
-            } catch (e) {
-                console.error("Erreur de parsing", key, e);
+            } catch {
+                // vide pour ne pas laisser de console.error ;)
+                return;
             }
         });
 
         setQuizzes(loaded);
-
-        setQuizzes(loaded);
     }, [items, setPageTitle]);
 
+    //IA-1-CODE: Correction de la fonction de formatage de date par ChatGPT (OpenAI)
     const formatDate = (iso) => {
         const date = new Date(iso);
         return date.toLocaleDateString("fr-FR", {
@@ -91,12 +92,14 @@ export default function AllQuiz() {
         <div className="p-4">
             <h1 className="md:block hidden">Toutes les corrections</h1>
             {quizzes.length === 0 ? (
-                <p className="text-slate-500">Aucune correction de quiz. Lance un quiz depuis une de tes notes.</p>
+                <p className="text-slate-500 pt-4">Aucune correction de quiz. Lance un quiz depuis une de tes notes.</p>
             ) : (
                 <div className="mt-6">
                     <ul className="space-y-2">
                         {quizzes.map((q) => (
                             <li
+                                tabIndex={0}
+                                onKeyDown={(e) => e.key === "Enter" && navigate(`/app/quiz-validated/${q.fileId}?q=${q.id}`)}
                                 key={q.id + q.validatedAt}
                                 onClick={() => navigate(`/app/quiz-validated/${q.fileId}?q=${q.id}`)}
                                 className="flex justify-between md:items-center cursor-pointer py-2 px-3 border rounded-md bg-white hover:bg-slate-50 transition"

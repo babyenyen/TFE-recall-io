@@ -46,6 +46,7 @@ function countDeletedChildrenRecursively(id, items) {
     return { folderCount, fileCount };
 }
 
+// IA-1-CODE: Correction et explication de la logique de restauration par ChatGPT (OpenAI)
 export default function Trash() {
     const [items, setItems] = useItems();
     const [openDialog, setOpenDialog] = useState(false);
@@ -138,6 +139,16 @@ export default function Trash() {
 
                             return (
                                 <li
+                                    tabIndex={0}
+                                    onKeyDown={(e) => {
+                                        if (e.key === "Enter") {
+                                            if (item.type === "folder") {
+                                                navigate(`/app/trash/folder/${item.id}`);
+                                            } else {
+                                                navigate(`/app/trash/file/${item.id}`);
+                                            }
+                                        }
+                                    }}
                                     key={item.id}
                                     onClick={() => {
                                         if (item.type === "folder") {

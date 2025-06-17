@@ -1,4 +1,4 @@
-//Context suggéré par Gemini (Google AI) pour la gestion du titre de page
+//IA-1-CODE: context suggéré par Gemini (Google AI) pour la gestion du titre de page
 import React, { createContext, useState, useContext } from 'react';
 
 // 1. Création du Context

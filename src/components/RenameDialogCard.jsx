@@ -46,6 +46,11 @@ export default function RenameDialogCard({ item, onRename, onCancel , forceOpen 
                     title="Renommer"
                     className="group absolute -right-7 bottom-1 bg-transparent m-0 p-0 px-2 text-slate-400"
                     onClick={(e) => e.stopPropagation()}
+                    onKeyDown={(e) => {
+                        if (e.key === "Enter") {
+                            e.stopPropagation();
+                        }
+                    }}
                 >
                     <Pencil size={14} className="group-hover:text-violet-600" />
                 </button>
@@ -62,6 +67,7 @@ export default function RenameDialogCard({ item, onRename, onCancel , forceOpen 
                     onClick={(e) => e.stopPropagation()}
                     onKeyDown={(e) => {
                         if (e.key === "Enter") {
+                            e.stopPropagation();
                             handleConfirm();
                         }
                     }}

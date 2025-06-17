@@ -13,7 +13,7 @@ import { Input } from "@/components/ui/input";
 import { useState } from "react";
 import { Pencil } from "lucide-react";
 
-//IA-1-CODE: Explication de la logique pour passer d'un "pompt" au "AlertDialog" de shadcn-ui par ChatGPT (OpenAI)
+//IA-1-CODE: Explication de la logique pour passer d'un prompt au "AlertDialog" de shadcn-ui par ChatGPT (OpenAI)
 export default function RenameDialogTitle({ item, onRename }) {
     const [open, setOpen] = useState(false);
     const [newName, setNewName] = useState(item.name);
